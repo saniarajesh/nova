@@ -1,0 +1,247 @@
+// Web Audio API Synthesizer for Nova Portal
+// Generates soft celestial sounds with zero external audio assets
+
+class SoundController {
+  constructor() {
+    this.ctx = null;
+    this.isMuted = true;
+    this.ambientOsc1 = null;
+    this.ambientOsc2 = null;
+    this.ambientGain = null;
+  }
+
+  init() {
+    if (!this.ctx && typeof window !== 'undefined') {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
+      }
+    }
+  }
+
+  toggleMute() {
+    this.init();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+    this.isMuted = !this.isMuted;
+    if (this.isMuted) {
+      this.stopAmbient();
+    } else {
+      this.startAmbient();
+      this.playChime();
+    }
+    return !this.isMuted;
+  }
+
+  startAmbient() {
+    if (this.isMuted || !this.ctx) return;
+    this.stopAmbient();
+
+    try {
+      // Gentle ethereal drone (F minor 9 / cosmic resonance)
+      this.ambientGain = this.ctx.createGain();
+      this.ambientGain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+      this.ambientGain.connect(this.ctx.destination);
+
+      this.ambientOsc1 = this.ctx.createOscillator();
+      this.ambientOsc1.type = 'sine';
+      this.ambientOsc1.frequency.setValueAtTime(174.61, this.ctx.currentTime); // F3
+
+      this.ambientOsc2 = this.ctx.createOscillator();
+      this.ambientOsc2.type = 'sine';
+      this.ambientOsc2.frequency.setValueAtTime(261.63, this.ctx.currentTime); // C4
+
+      this.ambientOsc1.connect(this.ambientGain);
+      this.ambientOsc2.connect(this.ambientGain);
+
+      this.ambientOsc1.start();
+      this.ambientOsc2.start();
+    } catch (e) {
+      console.warn("Audio ambient error:", e);
+    }
+  }
+
+  stopAmbient() {
+    try {
+      if (this.ambientOsc1) {
+        this.ambientOsc1.stop();
+        this.ambientOsc1.disconnect();
+        this.ambientOsc1 = null;
+      }
+      if (this.ambientOsc2) {
+        this.ambientOsc2.stop();
+        this.ambientOsc2.disconnect();
+        this.ambientOsc2 = null;
+      }
+    } catch (e) {
+      // ignore stop errors
+    }
+  }
+
+  playChime() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, now); // D5
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.6);
+    } catch (e) {}
+  }
+
+  playShiftForm() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + i * 0.06);
+
+        gain.gain.setValueAtTime(0.035, now + i * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.06 + 0.4);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now + i * 0.06);
+        osc.stop(now + i * 0.06 + 0.4);
+      });
+    } catch (e) {}
+  }
+
+  playTransmission() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.5);
+
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.8);
+    } catch (e) {}
+  }
+
+  playGuitarString(freq = 440) {
+    this.init();
+    if (!this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      // Triangle waveform with bright harmonics simulating celestial acoustic string
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now);
+
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 1.2);
+    } catch (e) {}
+  }
+
+  playCelestialChord() {
+    this.init();
+    if (!this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    try {
+      const chord = [261.63, 329.63, 392.00, 523.25, 659.25]; // C major 7th ethereal celestial chord
+      chord.forEach((freq, idx) => {
+        const now = this.ctx.currentTime + idx * 0.08;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 1.4);
+      });
+    } catch (e) {}
+  }
+
+  playStaffAwaken() {
+    this.init();
+    if (!this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    try {
+      const now = this.ctx.currentTime;
+      const bassOsc = this.ctx.createOscillator();
+      const bassGain = this.ctx.createGain();
+      bassOsc.type = 'sine';
+      bassOsc.frequency.setValueAtTime(120, now);
+      bassOsc.frequency.exponentialRampToValueAtTime(50, now + 0.8);
+      bassGain.gain.setValueAtTime(0.18, now);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+      bassOsc.connect(bassGain);
+      bassGain.connect(this.ctx.destination);
+      bassOsc.start(now);
+      bassOsc.stop(now + 0.8);
+
+      [440, 554.37, 659.25, 880, 1108.73, 1318.51].forEach((freq, idx) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const t = now + idx * 0.06;
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, t);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.4, t + 0.35);
+        gain.gain.setValueAtTime(0.06, t);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.8);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.8);
+      });
+    } catch (e) {}
+  }
+}
+
+export const soundFx = new SoundController();
