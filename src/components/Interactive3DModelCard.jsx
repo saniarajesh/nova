@@ -175,10 +175,11 @@ export default function Interactive3DModelCard({ item }) {
               />
 
               {/* The High-Res Weapon/Book Artwork rendered in 3D Space */}
-              <div className="relative w-[75%] aspect-[4/5] rounded-[24px] overflow-hidden border-2 border-amber-400/40 shadow-[0_0_50px_rgba(239,68,68,0.35)] group bg-black/80 backdrop-blur-2xl">
+              <div className="relative w-[75%] aspect-[4/5] rounded-[24px] overflow-hidden border-2 border-amber-400/40 shadow-[0_0_50px_rgba(239,68,68,0.35)] group bg-black/80 backdrop-blur-2xl border-glow">
                 <img
                   src={item.image}
                   alt={item.name}
+                  loading="lazy"
                   className="w-full h-full object-contain filter contrast-[1.08] brightness-[1.03] transition-all duration-300"
                   style={{ transform: 'scale(1.02)' }}
                 />
@@ -187,6 +188,11 @@ export default function Interactive3DModelCard({ item }) {
                 {isAwakened && (
                   <div className="absolute inset-0 bg-gradient-to-r from-red-600/40 via-amber-300/40 to-purple-600/40 mix-blend-screen pointer-events-none animate-ping" />
                 )}
+
+                {/* Inner shadow depth overlay */}
+                <div className="absolute inset-0 pointer-events-none rounded-[24px]"
+                  style={{ boxShadow: 'inset 0 0 40px rgba(0,0,0,0.5), inset 0 0 80px rgba(0,0,0,0.25)' }}
+                />
 
                 {/* Dynamic Lighting Shine Overlay */}
                 <div

@@ -1,0 +1,103 @@
+<div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #1e293b; background-color: #fff8f1; padding: 24px 12px;">
+  <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; border: 1px solid #fed7aa; padding: 24px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+    
+    <!-- Header -->
+    <div style="border-bottom: 2px solid #fc0038; padding-bottom: 16px; margin-bottom: 20px;">
+      <h2 style="margin: 0; color: #991b1b; font-size: 20px; font-weight: 700; letter-spacing: 0.5px;">
+        ✦ NOVA BEACON TRANSMISSION ESTABLISHED
+      </h2>
+      <p style="margin: 4px 0 0 0; color: #78350f; font-size: 13px; font-weight: 500;">
+        The Celestial Weaver • Star Veils Multiverse Portal
+      </p>
+    </div>
+
+    <!-- Greeting & Status -->
+    <p style="margin: 0 0 14px 0;">
+      Greetings, <strong>{{name}}</strong>!
+    </p>
+    <p style="margin: 0 0 16px 0; color: #475569;">
+      Your emergency beacon transmission has been securely logged and processed by Nova's Harmonic Lens. A duplicate record has been forwarded to the administrative registry (<strong style="color: #991b1b;">saniarajesh7205@gmail.com</strong>).
+    </p>
+
+    <!-- Beacon Summary Card -->
+    <div style="background-color: #fffaf5; border: 1px solid #fbd5b5; border-radius: 8px; padding: 16px; margin: 20px 0;">
+      <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #e2e8f0;">
+        <span style="font-size: 12px; font-weight: bold; color: #991b1b; text-transform: uppercase; letter-spacing: 0.5px;">Transmission Metadata</span>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <tr>
+          <td style="padding: 6px 0; color: #64748b; width: 140px;"><strong>Beacon ID:</strong></td>
+          <td style="padding: 6px 0; color: #b45309; font-family: monospace; font-weight: bold; font-size: 15px;">{{beacon_id}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b;"><strong>Speaker Alias:</strong></td>
+          <td style="padding: 6px 0; color: #0f172a; font-weight: 600;">{{name}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b;"><strong>Age / Location:</strong></td>
+          <td style="padding: 6px 0; color: #0f172a;">{{age}} • {{location}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b;"><strong>Contact Email:</strong></td>
+          <td style="padding: 6px 0; color: #0f172a;">{{email}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b;"><strong>Action Category:</strong></td>
+          <td style="padding: 6px 0; color: #7c2d12; font-weight: 600;">{{category}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b;"><strong>Urgency Level:</strong></td>
+          <td style="padding: 6px 0; color: #dc2626; font-weight: bold;">{{urgency}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b;"><strong>Timestamp:</strong></td>
+          <td style="padding: 6px 0; color: #64748b; font-size: 13px;">{{timestamp}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Grievance Content -->
+    <div style="margin: 20px 0;">
+      <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: bold; color: #991b1b; text-transform: uppercase;">
+        ▶ Grievance / Starlit Record:
+      </p>
+      <div style="background-color: #f8fafc; border-left: 4px solid #fc0038; padding: 14px 16px; border-radius: 0 8px 8px 0; color: #334155; font-style: italic; line-height: 1.6;">
+        "{{grievance}}"
+      </div>
+    </div>
+
+    <!-- CTA Button -->
+    <p style="text-align: center; margin: 28px 0;">
+      <a
+        style="
+          display: inline-block;
+          text-decoration: none;
+          outline: none;
+          color: #ffffff;
+          background-color: #fc0038;
+          font-weight: 600;
+          font-size: 15px;
+          padding: 10px 24px;
+          border-radius: 6px;
+          box-shadow: 0 4px 10px rgba(252, 0, 56, 0.3);
+        "
+        href="http://localhost:3001/"
+        target="_blank"
+      >
+        Open Nova Portal
+      </a>
+    </p>
+
+    <!-- Support / Footer -->
+    <p style="font-size: 13px; color: #64748b; margin: 24px 0 12px 0; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+      If you have additional information to submit or need assistance, reply to this email or reach Nova command at
+      <a href="mailto:saniarajesh7205@gmail.com" style="text-decoration: none; outline: none; color: #fc0038; font-weight: 600;"
+        >saniarajesh7205@gmail.com</a
+      >.
+    </p>
+    <p style="font-size: 13px; color: #475569; margin: 0;">
+      With celestial vigilance,<br />
+      <strong>The Nova Portal Team</strong>
+    </p>
+  </div>
+</div>

@@ -52,7 +52,7 @@ export default function Navbar({ activePage, setActivePage, isMuted, setIsMuted 
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>PAGE 1 • Hero Showcase</span>
+            <span>Showcase</span>
           </button>
 
           <button 
@@ -64,7 +64,7 @@ export default function Navbar({ activePage, setActivePage, isMuted, setIsMuted 
             }`}
           >
             <Compass className="w-3.5 h-3.5 text-red-400" />
-            <span>PAGE 2 • 3D Arsenal & Relics</span>
+            <span>Weapons & Lore</span>
           </button>
 
           <button 
@@ -76,7 +76,7 @@ export default function Navbar({ activePage, setActivePage, isMuted, setIsMuted 
             }`}
           >
             <Radio className="w-3.5 h-3.5 text-purple-400" />
-            <span>PAGE 3 • AI Help Portal</span>
+            <span>AI Portal</span>
           </button>
         </div>
 
@@ -98,8 +98,7 @@ export default function Navbar({ activePage, setActivePage, isMuted, setIsMuted 
             onClick={() => handleNav('chat')}
             className="group px-4 sm:px-5 py-2.5 rounded-full border border-amber-400/80 bg-gradient-to-r from-red-950/90 via-amber-950/80 to-purple-950/90 hover:from-red-900 hover:to-purple-900 text-amber-200 hover:text-white text-xs font-serif font-bold tracking-wider uppercase shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transition-all flex items-center gap-2"
           >
-            <Radio className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-            <span className="hidden sm:inline">Ask for Help</span>
+            <span className="hidden sm:inline">Open Codex</span>
             <ArrowRight className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-0.5 transition-transform" />
           </button>
 

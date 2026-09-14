@@ -24,9 +24,9 @@ export default {
       },
       fontFamily: {
         sans: ['"Times New Roman"', 'Times', 'serif'],
-        display: ['"Times New Roman"', 'Times', 'serif'],
-        cinzel: ['"Times New Roman"', 'Times', 'serif'],
-        'cinzel-dec': ['"Times New Roman"', 'Times', 'serif'],
+        display: ['"Cinzel"', '"Times New Roman"', 'serif'],
+        cinzel: ['"Cinzel"', 'serif'],
+        'cinzel-dec': ['"Cinzel Decorative"', '"Cinzel"', 'serif'],
         serif: ['"Times New Roman"', 'Times', 'serif'],
       },
       animation: {

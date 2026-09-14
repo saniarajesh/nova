@@ -23,3 +23,11 @@ dist-isolation
 *.njsproj
 *.sln
 *.sw?
+
+# Environment / secrets — NEVER commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.secret

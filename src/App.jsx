@@ -74,19 +74,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Floating Quick-Access to AI Dispatch (Visible on other pages) */}
-      {activePage !== 'chat' && (
-        <button
-          onClick={() => handleNavigate('chat')}
-          className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-gradient-to-tr from-purple-600 via-pink-600 to-cyan-400 text-white shadow-2xl hover:scale-110 transition-all duration-300 flex items-center gap-2 group border border-white/20 glow-violet"
-          title="Open AI Help Portal (ChatGPT)"
-        >
-          <MessageSquare className="w-5 h-5 animate-pulse" />
-          <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap text-xs font-bold uppercase tracking-wider pl-1">
-            Talk to AI Agent
-          </span>
-        </button>
-      )}
 
       {/* Footer (Rendered on Weapons & AI Chat pages) */}
       {activePage !== 'hero' && (

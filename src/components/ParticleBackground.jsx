@@ -6,8 +6,9 @@ export default function ParticleBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     let animationFrameId;
+    let lastFrame = 0;
 
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
@@ -16,11 +17,10 @@ export default function ParticleBackground() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
-
     window.addEventListener('resize', handleResize);
 
-    // Static & drifting stars
-    const particles = Array.from({ length: 80 }, () => ({
+    // Static & drifting stars (reduced from 80 → 50)
+    const particles = Array.from({ length: 50 }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       radius: Math.random() * 1.8 + 0.6,
@@ -36,6 +36,7 @@ export default function ParticleBackground() {
     let lastSpawnTime = Date.now();
 
     const spawnShootingStar = () => {
+      if (shootingStars.length >= 3) return; // cap concurrent shooting stars
       const isFromLeft = Math.random() > 0.3;
       const startX = isFromLeft ? Math.random() * (width * 0.7) : width + 20;
       const startY = Math.random() * (height * 0.45);
@@ -52,20 +53,30 @@ export default function ParticleBackground() {
         dy: Math.sin(angle) * speed,
         alpha: 1,
         decay: Math.random() * 0.015 + 0.012,
-        color: '216, 180, 254', // violet star tail
+        color: '216, 180, 254',
         headColor: '#ffffff',
       });
     };
 
     spawnShootingStar();
 
-    const render = () => {
+    // 30fps throttle
+    const FRAME_INTERVAL = 1000 / 30;
+
+    const render = (timestamp) => {
+      animationFrameId = requestAnimationFrame(render);
+
+      const elapsed = timestamp - lastFrame;
+      if (elapsed < FRAME_INTERVAL) return;
+      lastFrame = timestamp - (elapsed % FRAME_INTERVAL);
+
       ctx.clearRect(0, 0, width, height);
 
       const baseColor = '168, 85, 247';
       const accentColor = '236, 72, 153';
 
-      // 1. Draw static / floating stars
+      // 1. Draw static / floating stars (batched, single pass)
+      ctx.save();
       particles.forEach((p, idx) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -79,13 +90,12 @@ export default function ParticleBackground() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = idx % 3 === 0 
-          ? `rgba(${accentColor}, ${currentAlpha})` 
+        ctx.fillStyle = idx % 3 === 0
+          ? `rgba(${accentColor}, ${currentAlpha})`
           : `rgba(${baseColor}, ${currentAlpha})`;
-        ctx.shadowBlur = p.isStar ? 6 : 0;
-        ctx.shadowColor = `rgba(${baseColor}, 0.8)`;
         ctx.fill();
       });
+      ctx.restore();
 
       // 2. Spawn shooting stars periodically
       const now = Date.now();
@@ -121,22 +131,16 @@ export default function ParticleBackground() {
         ctx.strokeStyle = gradient;
         ctx.lineWidth = 2.2;
         ctx.lineCap = 'round';
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = `rgba(${star.color}, 0.9)`;
         ctx.stroke();
 
         ctx.beginPath();
         ctx.arc(star.x, star.y, 2.5, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = '#ffffff';
         ctx.fill();
       }
-
-      animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    animationFrameId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -148,6 +152,7 @@ export default function ParticleBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0 opacity-80"
+      style={{ contain: 'layout paint' }}
     />
   );
 }

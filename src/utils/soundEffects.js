@@ -1,6 +1,8 @@
 // Web Audio API Synthesizer for Nova Portal
 // Generates soft celestial sounds with zero external audio assets
 
+const MAX_CONCURRENT_SOUNDS = 8;
+
 class SoundController {
   constructor() {
     this.ctx = null;
@@ -8,6 +10,7 @@ class SoundController {
     this.ambientOsc1 = null;
     this.ambientOsc2 = null;
     this.ambientGain = null;
+    this.activeSounds = 0;
   }
 
   init() {
@@ -17,6 +20,16 @@ class SoundController {
         this.ctx = new AudioCtx();
       }
     }
+  }
+
+  _canPlay() {
+    if (this.activeSounds >= MAX_CONCURRENT_SOUNDS) return false;
+    return true;
+  }
+
+  _trackSound(duration) {
+    this.activeSounds++;
+    setTimeout(() => { this.activeSounds = Math.max(0, this.activeSounds - 1); }, duration * 1000);
   }
 
   toggleMute() {
@@ -39,18 +52,17 @@ class SoundController {
     this.stopAmbient();
 
     try {
-      // Gentle ethereal drone (F minor 9 / cosmic resonance)
       this.ambientGain = this.ctx.createGain();
       this.ambientGain.gain.setValueAtTime(0.015, this.ctx.currentTime);
       this.ambientGain.connect(this.ctx.destination);
 
       this.ambientOsc1 = this.ctx.createOscillator();
       this.ambientOsc1.type = 'sine';
-      this.ambientOsc1.frequency.setValueAtTime(174.61, this.ctx.currentTime); // F3
+      this.ambientOsc1.frequency.setValueAtTime(174.61, this.ctx.currentTime);
 
       this.ambientOsc2 = this.ctx.createOscillator();
       this.ambientOsc2.type = 'sine';
-      this.ambientOsc2.frequency.setValueAtTime(261.63, this.ctx.currentTime); // C4
+      this.ambientOsc2.frequency.setValueAtTime(261.63, this.ctx.currentTime);
 
       this.ambientOsc1.connect(this.ambientGain);
       this.ambientOsc2.connect(this.ambientGain);
@@ -82,7 +94,7 @@ class SoundController {
   playChime() {
     if (this.isMuted) return;
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx || !this._canPlay()) return;
 
     try {
       const now = this.ctx.currentTime;
@@ -90,8 +102,8 @@ class SoundController {
       const gain = this.ctx.createGain();
 
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, now); // D5
-      osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+      osc.frequency.setValueAtTime(587.33, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
 
       gain.gain.setValueAtTime(0.05, now);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
@@ -101,13 +113,14 @@ class SoundController {
 
       osc.start(now);
       osc.stop(now + 0.6);
+      this._trackSound(0.6);
     } catch (e) {}
   }
 
   playShiftForm() {
     if (this.isMuted) return;
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx || !this._canPlay()) return;
 
     try {
       const now = this.ctx.currentTime;
@@ -127,13 +140,14 @@ class SoundController {
         osc.start(now + i * 0.06);
         osc.stop(now + i * 0.06 + 0.4);
       });
+      this._trackSound(0.64);
     } catch (e) {}
   }
 
   playTransmission() {
     if (this.isMuted) return;
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx || !this._canPlay()) return;
 
     try {
       const now = this.ctx.currentTime;
@@ -152,12 +166,13 @@ class SoundController {
 
       osc.start(now);
       osc.stop(now + 0.8);
+      this._trackSound(0.8);
     } catch (e) {}
   }
 
   playGuitarString(freq = 440) {
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx || !this._canPlay()) return;
     if (this.ctx.state === 'suspended') this.ctx.resume();
 
     try {
@@ -165,7 +180,6 @@ class SoundController {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
-      // Triangle waveform with bright harmonics simulating celestial acoustic string
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, now);
 
@@ -177,16 +191,17 @@ class SoundController {
 
       osc.start(now);
       osc.stop(now + 1.2);
+      this._trackSound(1.2);
     } catch (e) {}
   }
 
   playCelestialChord() {
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx || !this._canPlay()) return;
     if (this.ctx.state === 'suspended') this.ctx.resume();
 
     try {
-      const chord = [261.63, 329.63, 392.00, 523.25, 659.25]; // C major 7th ethereal celestial chord
+      const chord = [261.63, 329.63, 392.00, 523.25, 659.25];
       chord.forEach((freq, idx) => {
         const now = this.ctx.currentTime + idx * 0.08;
         const osc = this.ctx.createOscillator();
@@ -204,12 +219,13 @@ class SoundController {
         osc.start(now);
         osc.stop(now + 1.4);
       });
+      this._trackSound(1.72);
     } catch (e) {}
   }
 
   playStaffAwaken() {
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx || !this._canPlay()) return;
     if (this.ctx.state === 'suspended') this.ctx.resume();
 
     try {
@@ -240,6 +256,7 @@ class SoundController {
         osc.start(t);
         osc.stop(t + 0.8);
       });
+      this._trackSound(1.1);
     } catch (e) {}
   }
 }

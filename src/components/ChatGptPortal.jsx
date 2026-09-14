@@ -7,6 +7,7 @@ import {
 import confetti from 'canvas-confetti';
 import { NOVA_LORE } from '../data/novaContent';
 import { soundFx } from '../utils/soundEffects';
+import { sendNovaBeaconEmail } from '../utils/email';
 
 export default function ChatGptPortal({ onComplete, onNavigate, initialSession = null }) {
   const [messages, setMessages] = useState([
@@ -26,7 +27,9 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
     age: '',
     location: '',
     email: '',
-    grievance: ''
+    grievance: '',
+    category: 'General Inquiry',
+    urgency: 'Standard'
   });
 
   const [sessions, setSessions] = useState([
@@ -38,10 +41,15 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
   const [activeSessionId, setActiveSessionId] = useState('sess-1');
   const [showExplanationModal, setShowExplanationModal] = useState(false);
   const [emailNotificationSent, setEmailNotificationSent] = useState(null);
-  const messagesEndRef = useRef(null);
+  const scrollContainerRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   useEffect(() => {
@@ -103,6 +111,23 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
       return;
     }
 
+    const isAction = promptStarters.some(s => s.action === query);
+    if (isAction && currentStep === 1) {
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Date.now() + 1,
+            role: 'assistant',
+            text: `Understood. To proceed with this intake, I need to know who I am speaking with. What is your name or preferred alias?`,
+            time: 'Just now'
+          }
+        ]);
+      }, 1000);
+      return;
+    }
+
     // Step-by-step intake wizard logic
     setTimeout(() => {
       setIsTyping(false);
@@ -126,11 +151,17 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
         botReply = `Thank you. Finally, please describe your grievance or what you need Nova's help with:`;
         nextStep = 5;
       } else if (currentStep === 5) {
-        const finalUserData = { ...userData, grievance: query };
+        const finalUserData = { 
+          ...userData, 
+          grievance: query,
+          problem: query,
+          id: 'NOVA-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+          timestamp: new Date().toISOString()
+        };
         setUserData(finalUserData);
         nextStep = 6;
 
-        botReply = `### ✦ BEACON ESTABLISHED SUCCESSFULLY!\n\nYour distress signal has been processed by the Harmonic Lens and recorded into the Starlit Journal.\n\n- **Name:** ${finalUserData.name}\n- **Age:** ${finalUserData.age}\n- **Location:** ${finalUserData.location}\n- **Email:** ${finalUserData.email}\n- **Grievance:** "${finalUserData.grievance}"\n\nGenerating your cryptographic Beacon Receipt...`;
+        botReply = `### ✦ BEACON ESTABLISHED SUCCESSFULLY!\n\nYour distress signal has been processed by the Harmonic Lens and recorded into the Starlit Journal.\n\n- **Name:** ${finalUserData.name}\n- **Category:** ${finalUserData.category}\n- **Grievance:** "${finalUserData.grievance}"\n\nGenerating your cryptographic Beacon Receipt...`;
 
         confetti({
           particleCount: 100,
@@ -139,6 +170,7 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
         });
 
         if (onComplete) {
+          sendNovaBeaconEmail(finalUserData).catch(err => console.error("Email dispatch failed:", err));
           setTimeout(() => {
             onComplete(finalUserData);
           }, 2000);
@@ -258,21 +290,35 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
               <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider block">
                 ✦ SELECT INTAKE ACTION:
               </span>
-              <div className="space-y-2">
-                {promptStarters.map((starter, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSend(starter.action)}
-                    className="w-full p-3 rounded-2xl border border-white/10 bg-white/5 hover:border-amber-400/60 hover:bg-white/10 text-left transition-all group"
-                  >
-                    <div className="text-xs font-bold text-amber-200 group-hover:text-amber-300">
+              <div className="space-y-2 mt-2 relative">
+                <select 
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      const selectedOption = promptStarters.find(s => s.action === e.target.value);
+                      if (selectedOption) {
+                        setUserData(prev => ({
+                          ...prev,
+                          category: selectedOption.title.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]\s*/gu, ''), // Strip emojis
+                          urgency: selectedOption.title.includes('Grievance') ? 'Critical' : 'High'
+                        }));
+                      }
+                      handleSend(e.target.value);
+                      e.target.value = ""; // Reset after selection
+                    }
+                  }}
+                  defaultValue=""
+                  className="w-full p-3.5 pr-10 rounded-2xl border border-white/20 bg-black/60 text-amber-200 text-xs font-bold hover:border-amber-400/60 transition-all cursor-pointer appearance-none outline-none focus:border-amber-400 shadow-inner"
+                >
+                  <option value="" disabled>-- Choose an Action Category --</option>
+                  {promptStarters.map((starter, idx) => (
+                    <option key={idx} value={starter.action} className="bg-black text-amber-200">
                       {starter.title}
-                    </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
-                      {starter.subtitle}
-                    </div>
-                  </button>
-                ))}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <Compass className="w-4 h-4 text-amber-400" />
+                </div>
               </div>
             </div>
 
@@ -319,7 +365,7 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
             </div>
 
             {/* Messages Scroll Area */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-4">
+            <div className="flex-1 p-6 overflow-y-auto space-y-4" ref={scrollContainerRef}>
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -365,7 +411,6 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
                   </div>
                 </div>
               )}
-              <div ref={messagesEndRef} />
             </div>
 
             {/* Message Input Box */}

@@ -22,22 +22,7 @@ export default function Footer({ onOpenConsole, onTriggerSafety }) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Banner CTA */}
-        <div className="text-center max-w-3xl mx-auto mb-16 pb-16 border-b border-white/10">
-          <h3 className="text-3xl sm:text-4xl font-extrabold text-white font-display mb-4">
-            "Your story matters."
-          </h3>
-          <p className="text-slate-300 text-sm sm:text-base mb-8 max-w-lg mx-auto">
-            Never let hardship make you believe your voice is too small to be heard. Nova is always here to listen.
-          </p>
-          <button
-            onClick={scrollToChat}
-            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-500 text-white font-bold text-sm shadow-xl hover:shadow-purple-500/40 hover:scale-105 transition-all duration-300 inline-flex items-center gap-2"
-          >
-            <Radio className="w-4 h-4 animate-pulse" />
-            <span>ASK FOR HELP</span>
-          </button>
-        </div>
+
 
         {/* Footer Navigation Columns */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 text-xs">
