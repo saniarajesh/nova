@@ -6,13 +6,13 @@ import CodexDrawer from './CodexDrawer';
 import { soundFx } from '../utils/soundEffects';
 
 export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted }) {
-  const [isAwakened, setIsAwakened]   = useState(false);
+  const [isAwakened, setIsAwakened] = useState(false);
   const [isCodexOpen, setIsCodexOpen] = useState(false);
-  const [hideHud, setHideHud]         = useState(false);
+  const [hideHud, setHideHud] = useState(false);
   const [activeString, setActiveString] = useState(null);
-  const [staffBurst, setStaffBurst]   = useState(null);
-  const [cursorPos, setCursorPos]     = useState({ x: 0, y: 0 });
-  const [mounted, setMounted]         = useState(false); // entrance animation gate
+  const [staffBurst, setStaffBurst] = useState(null);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [mounted, setMounted] = useState(false); // entrance animation gate
 
   // Mouse tilt (character only)
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, moveX: 0, moveY: 0 });
@@ -20,9 +20,9 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
   // Scroll parallax (character only)
   const [scrollY, setScrollY] = useState(0);
 
-  const containerRef  = useRef(null);
-  const targetTilt    = useRef({ rx: 0, ry: 0, mx: 0, my: 0 });
-  const currentTilt   = useRef({ rx: 0, ry: 0, mx: 0, my: 0 });
+  const containerRef = useRef(null);
+  const targetTilt = useRef({ rx: 0, ry: 0, mx: 0, my: 0 });
+  const currentTilt = useRef({ rx: 0, ry: 0, mx: 0, my: 0 });
 
   // ── Entrance mount ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -42,8 +42,8 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
       setTilt({
         rotateX: currentTilt.current.rx,
         rotateY: currentTilt.current.ry,
-        moveX:   currentTilt.current.mx,
-        moveY:   currentTilt.current.my,
+        moveX: currentTilt.current.mx,
+        moveY: currentTilt.current.my,
       });
       rafId = requestAnimationFrame(tick);
     };
@@ -61,7 +61,7 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
   // ── Mouse move → tilt target ──────────────────────────────────────────────
   const handleMouseMove = (e) => {
     setCursorPos({ x: e.clientX, y: e.clientY });
-    const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
+    const nx = (e.clientX / window.innerWidth - 0.5) * 2;
     const ny = (e.clientY / window.innerHeight - 0.5) * 2;
     targetTilt.current = { rx: ny * -5, ry: nx * 6, mx: nx * 12, my: ny * 8 };
   };
@@ -71,8 +71,8 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
     soundFx.playStaffAwaken();
     setIsAwakened(true);
     const rect = containerRef.current?.getBoundingClientRect();
-    const staffX = rect ? rect.left + rect.width  * 0.282 : window.innerWidth  * 0.28;
-    const staffY = rect ? rect.top  + rect.height * 0.218 : window.innerHeight * 0.22;
+    const staffX = rect ? rect.left + rect.width * 0.282 : window.innerWidth * 0.28;
+    const staffY = rect ? rect.top + rect.height * 0.218 : window.innerHeight * 0.22;
     setStaffBurst({ x: staffX, y: staffY, timestamp: Date.now() });
     setTimeout(() => setIsAwakened(false), 2800);
   };
@@ -86,9 +86,9 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
 
   const celestialChords = [
     { label: 'C4', name: 'Solitary Core', freq: 261.63 },
-    { label: 'E4', name: 'Memory Wave',   freq: 329.63 },
+    { label: 'E4', name: 'Memory Wave', freq: 329.63 },
     { label: 'G4', name: 'Stellar Pulse', freq: 392.00 },
-    { label: 'B4', name: 'Nebula Veil',   freq: 493.88 },
+    { label: 'B4', name: 'Nebula Veil', freq: 493.88 },
   ];
 
   const charScrollOffset = scrollY * 0.4;
@@ -143,7 +143,7 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
           <div className="w-full flex items-center justify-between px-4 sm:px-12 md:px-20
                           font-cinzel font-black tracking-[-0.03em] text-[18vw] leading-none
                           uppercase select-none" style={{ filter: 'blur(0.4px)' }}>
-            {['N','O','V','A'].map((l, i) => (
+            {['N', 'O', 'V', 'A'].map((l, i) => (
               <span
                 key={l}
                 className={`nova-letter nova-shimmer drop-shadow-[0_0_60px_rgba(220,38,38,0.45)]`}
@@ -162,45 +162,8 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
         <span className="rune-float-d3   absolute top-[60%] right-[6%] text-3xl text-amber-300/18 pointer-events-none z-[15] font-mono">⊕</span>
         <span className="rune-float-d4   absolute bottom-[22%] left-[46%] text-xl text-red-500/20 pointer-events-none z-[15] font-mono">❋</span>
 
-        {/* ── Left vertical atmospheric pillar (Soul Knight inspo) ────────────── */}
-        <div
-          className={`hidden lg:flex flex-col items-center gap-3 absolute left-7 top-36 z-[35] pointer-events-none
-                      font-mono text-[11px] tracking-[0.35em] text-amber-200/55 uppercase
-                      ${tx()} ${mounted ? 'opacity-100 translate-x-0 delay-500' : 'opacity-0 -translate-x-6'}`}
-        >
-          <span className="text-2xl text-amber-400 drop-shadow-[0_0_12px_rgba(251,191,36,0.7)]">✦</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-amber-400/50 to-transparent" />
-          <div className="space-y-5 text-center leading-none">
-            <p className="hover:text-amber-300 transition-colors cursor-default">ALONE</p>
-            <p className="hover:text-amber-300 transition-colors cursor-default">SUFFERED</p>
-            <p className="text-amber-400 font-bold">REBORN</p>
-          </div>
-          <div className="w-[1px] h-12 bg-gradient-to-t from-amber-400/50 to-transparent" />
-          <span className="text-lg text-red-500/60">◈</span>
-        </div>
 
-        {/* ── Right glassmorphic mini-quote card (Soul Knight inspo) ──────────── */}
-        <div
-          className={`hidden xl:flex flex-col absolute right-8 top-36 z-[35] pointer-events-none
-                      max-w-[230px] space-y-2 bg-black/50 border border-amber-500/25 backdrop-blur-md
-                      p-4 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.6)] border-glow
-                      ${tx()} ${mounted ? 'opacity-100 translate-x-0 delay-700' : 'opacity-0 translate-x-8'}`}
-        >
-          <p className="font-mono text-[10px] tracking-widest text-amber-300/70 uppercase border-b border-amber-500/20 pb-2">
-            ✦ CELESTIAL TRANSMISSION
-          </p>
-          <p className="font-serif italic text-xs text-zinc-300 leading-relaxed">
-            "SOME MELODIES NEVER FADE.
-          </p>
-          <p className="font-serif italic text-xs text-amber-300 leading-relaxed">
-            I MAKE SURE THEY GUIDE THE LOST."
-          </p>
-          <div className="w-full h-[1px] bg-amber-500/20" />
-          <div className="flex items-center gap-1.5 text-[9px] font-mono text-emerald-400 tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-            <span>COSMIC FREQUENCY: ACTIVE</span>
-          </div>
-        </div>
+
 
         {/* ── LAYER 2: CHARACTER — scroll parallax + mouse 3D tilt ────────────── */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
@@ -418,7 +381,7 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
             {/* Entity scan data bars */}
             <div className="space-y-1.5 pt-1">
               {[
-                { label: 'RESONANCE',     pct: '82%', color: 'bg-red-500' },
+                { label: 'RESONANCE', pct: '82%', color: 'bg-red-500' },
                 { label: 'CELESTIAL SYNC', pct: '94%', color: 'bg-amber-400' },
                 { label: 'HARMONIC FIELD', pct: '71%', color: 'bg-purple-500' },
               ].map(bar => (
@@ -428,7 +391,7 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
                   </div>
                   <div className="h-[3px] w-full bg-white/5 rounded-full overflow-hidden">
                     <div className={`h-full ${bar.color} rounded-full`}
-                         style={{ width: bar.pct, transition: 'width 1.5s ease-out' }} />
+                      style={{ width: bar.pct, transition: 'width 1.5s ease-out' }} />
                   </div>
                 </div>
               ))}
@@ -467,11 +430,10 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
                 <button
                   key={chord.label}
                   onClick={() => handlePlayChord(chord.freq, idx)}
-                  className={`p-2.5 rounded-xl border text-left transition-all duration-200 flex flex-col justify-between ${
-                    activeString === idx
-                      ? 'bg-red-600/40 border-amber-400 shadow-md shadow-red-500/50 scale-105'
-                      : 'bg-white/5 border-white/10 hover:border-red-400/50 hover:bg-white/10'
-                  }`}
+                  className={`p-2.5 rounded-xl border text-left transition-all duration-200 flex flex-col justify-between ${activeString === idx
+                    ? 'bg-red-600/40 border-amber-400 shadow-md shadow-red-500/50 scale-105'
+                    : 'bg-white/5 border-white/10 hover:border-red-400/50 hover:bg-white/10'
+                    }`}
                 >
                   <span className="text-xs font-bold text-white font-mono">{chord.label}</span>
                   <span className="text-[9px] text-amber-300/80 font-medium truncate">{chord.name}</span>
@@ -483,11 +445,10 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
             <button
               onClick={handleAwakenStaff}
               className={`group w-full py-2.5 px-4 rounded-full font-bold text-xs uppercase tracking-wider
-                          transition-all flex items-center justify-center gap-2 border ${
-                isAwakened
+                          transition-all flex items-center justify-center gap-2 border ${isAwakened
                   ? 'bg-red-600 border-amber-300 text-white shadow-[0_0_30px_rgba(239,68,68,0.6)] scale-105'
                   : 'border-amber-500/50 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 hover:border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.2)] hover:shadow-[0_0_25px_rgba(251,191,36,0.4)]'
-              }`}
+                }`}
             >
               <Zap className={`w-3.5 h-3.5 ${isAwakened ? 'animate-bounce text-yellow-300' : 'text-amber-400 group-hover:scale-125 transition-transform'}`} />
               <span>{isAwakened ? 'Core Ignited!' : 'Ignite Astrolabe'}</span>
@@ -515,9 +476,7 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
             <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform" />
           </button>
 
-          <span className="text-[10px] font-mono tracking-[0.3em] text-amber-400/60 uppercase scroll-bounce">
-            SCROLL DOWN OR CLICK TO EXPLORE HER ARSENAL
-          </span>
+
         </div>
 
         {/* Side scroll hints */}

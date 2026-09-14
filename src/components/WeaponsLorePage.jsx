@@ -41,7 +41,7 @@ export default function WeaponsLorePage({ onNavigate }) {
         {/* 2. WEAPON SELECTION TABS                                                  */}
         {/* ========================================================================= */}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          {NOVA_LORE.weapons.map((w) => (
+          {NOVA_LORE.weapons.filter(w => w.id !== 'astrolabe_codex').map((w) => (
             <button
               key={w.id}
               onClick={() => {

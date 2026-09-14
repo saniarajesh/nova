@@ -57,7 +57,7 @@ export const NOVA_LORE = {
         { note: "G4", freq: 392.00, label: "Tears into Hope" },
         { note: "B4", freq: 493.88, label: "Multiverse Resonance" }
       ],
-      image: "/nova-weapon-astrolabe.jpg",
+      image: "/celestial-violin-cosmic-light.jpg",
       quote: "Every note is a step towards a better tomorrow."
     },
     {

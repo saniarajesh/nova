@@ -83,7 +83,7 @@ export default function Interactive3DModelCard({ item }) {
 
   return (
     <div className="relative w-full rounded-3xl border border-amber-500/30 bg-black/70 backdrop-blur-xl p-6 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
-      
+
       {/* Background ambient lighting */}
       <div className="absolute inset-0 bg-gradient-to-tr from-red-950/20 via-purple-950/20 to-amber-950/20 pointer-events-none" />
       <div className="absolute top-0 right-0 w-80 h-80 bg-red-600/10 rounded-full blur-[100px] pointer-events-none" />
@@ -110,11 +110,10 @@ export default function Interactive3DModelCard({ item }) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsAutoSpinning(!isAutoSpinning)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-mono transition-all flex items-center gap-1.5 border ${
-              isAutoSpinning
-                ? 'bg-amber-500/20 border-amber-400/60 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]'
-                : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
-            }`}
+            className={`px-3.5 py-2 rounded-xl text-xs font-mono transition-all flex items-center gap-1.5 border ${isAutoSpinning
+              ? 'bg-amber-500/20 border-amber-400/60 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]'
+              : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
+              }`}
             title="Toggle Automatic 3D Orbit"
           >
             <RotateCw className={`w-3.5 h-3.5 ${isAutoSpinning ? 'animate-spin-slow' : ''}`} />
@@ -131,11 +130,10 @@ export default function Interactive3DModelCard({ item }) {
 
           <button
             onClick={handleAwaken}
-            className={`px-4 py-2 rounded-xl font-mono text-xs font-bold uppercase transition-all flex items-center gap-1.5 border ${
-              isAwakened
-                ? 'bg-red-600 border-amber-300 text-white shadow-lg shadow-red-600/50 scale-105'
-                : 'bg-gradient-to-r from-red-950 to-purple-950 border-amber-500/40 text-amber-300 hover:border-amber-400'
-            }`}
+            className={`px-4 py-2 rounded-xl font-mono text-xs font-bold uppercase transition-all flex items-center gap-1.5 border ${isAwakened
+              ? 'bg-red-600 border-amber-300 text-white shadow-lg shadow-red-600/50 scale-105'
+              : 'bg-gradient-to-r from-red-950 to-purple-950 border-amber-500/40 text-amber-300 hover:border-amber-400'
+              }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
             <span>{isAwakened ? 'Relic Ignited!' : 'Awaken Relic'}</span>
@@ -145,7 +143,7 @@ export default function Interactive3DModelCard({ item }) {
 
       {/* 3D Model Stage Viewport */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-20">
-        
+
         {/* Left 3D Interactive Stage Canvas */}
         <div className="lg:col-span-7 flex flex-col items-center">
           <div
@@ -177,11 +175,11 @@ export default function Interactive3DModelCard({ item }) {
               />
 
               {/* The High-Res Weapon/Book Artwork rendered in 3D Space */}
-              <div className="relative w-[85%] h-[85%] rounded-2xl overflow-hidden border-2 border-amber-400/40 shadow-[0_0_50px_rgba(239,68,68,0.35)] group">
+              <div className="relative w-[75%] aspect-[4/5] rounded-[24px] overflow-hidden border-2 border-amber-400/40 shadow-[0_0_50px_rgba(239,68,68,0.35)] group bg-black/80 backdrop-blur-2xl">
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-full h-full object-cover filter contrast-[1.08] brightness-[1.03] transition-all duration-300"
+                  className="w-full h-full object-contain filter contrast-[1.08] brightness-[1.03] transition-all duration-300"
                   style={{ transform: 'scale(1.02)' }}
                 />
 
@@ -216,9 +214,8 @@ export default function Interactive3DModelCard({ item }) {
                     </div>
 
                     {/* Hotspot Tooltip */}
-                    <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2.5 rounded-xl bg-black/90 border border-amber-400/60 text-left backdrop-blur-md shadow-2xl transition-all duration-300 ${
-                      activeHotspot === idx ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none group-hover/spot:opacity-100 group-hover/spot:scale-100'
-                    }`}>
+                    <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2.5 rounded-xl bg-black/90 border border-amber-400/60 text-left backdrop-blur-md shadow-2xl transition-all duration-300 ${activeHotspot === idx ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none group-hover/spot:opacity-100 group-hover/spot:scale-100'
+                      }`}>
                       <div className="text-[11px] font-bold text-amber-300 font-serif">{spot.label}</div>
                       <div className="text-[10px] text-slate-300 leading-tight mt-0.5">{spot.detail}</div>
                     </div>
