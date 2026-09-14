@@ -259,6 +259,59 @@ class SoundController {
       this._trackSound(1.1);
     } catch (e) {}
   }
+
+  playPageTurn() {
+    this.init();
+    if (!this.ctx || !this._canPlay()) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    try {
+      const now = this.ctx.currentTime;
+      // Synthesize soft parchment friction whoosh
+      const bufferSize = this.ctx.sampleRate * 0.22;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+      }
+
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(1400, now);
+      filter.frequency.exponentialRampToValueAtTime(700, now + 0.22);
+      filter.Q.setValueAtTime(1.8, now);
+
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      noise.start(now);
+      noise.stop(now + 0.22);
+
+      // Subtle celestial chime harmonic on page settle
+      const osc = this.ctx.createOscillator();
+      const oscGain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, now + 0.05); // D5
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.3); // A5
+      oscGain.gain.setValueAtTime(0.02, now + 0.05);
+      oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+
+      osc.connect(oscGain);
+      oscGain.connect(this.ctx.destination);
+      osc.start(now + 0.05);
+      osc.stop(now + 0.35);
+
+      this._trackSound(0.4);
+    } catch (e) {}
+  }
 }
 
 export const soundFx = new SoundController();

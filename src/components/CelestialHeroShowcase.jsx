@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Compass, Volume2, VolumeX, BookOpen, Eye, EyeOff, Radio, Music, Zap, ArrowRight } from 'lucide-react';
+import { Sparkles, Compass, Volume2, VolumeX, BookOpen, Eye, EyeOff, Radio, Music, Zap, ArrowRight, ChevronDown } from 'lucide-react';
 import CrimsonParticlesCanvas from './CrimsonParticlesCanvas';
 import CelestialStaffCore from './CelestialStaffCore';
 import CodexDrawer from './CodexDrawer';
+import NovaStoryTimeline from './NovaStoryTimeline';
+import Footer from './Footer';
 import { soundFx } from '../utils/soundEffects';
 
-export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted }) {
+export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted, onOpenConsole, onTriggerSafety }) {
   const [isAwakened, setIsAwakened] = useState(false);
   const [isCodexOpen, setIsCodexOpen] = useState(false);
   const [hideHud, setHideHud] = useState(false);
@@ -13,6 +15,7 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
   const [staffBurst, setStaffBurst] = useState(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false); // entrance animation gate
+  const [novaEntered, setNovaEntered] = useState(false); // Enter key gate for NOVA animation
 
   // Mouse tilt (character only)
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, moveX: 0, moveY: 0 });
@@ -29,6 +32,19 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
     const id = setTimeout(() => setMounted(true), 120);
     return () => clearTimeout(id);
   }, []);
+
+  // ── Enter key → activate NOVA animation ──────────────────────────────────
+  useEffect(() => {
+    if (novaEntered) return; // already activated, stop listening
+    const handleKey = (e) => {
+      if (e.key === 'Enter') {
+        setNovaEntered(true);
+        soundFx.playChime();
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [novaEntered]);
 
   // ── Lerp RAF for smooth tilt ──────────────────────────────────────────────
   useEffect(() => {
@@ -102,18 +118,14 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
       : 'opacity-0 translate-y-5';
 
   return (
-    <>
-      {/* Scroll spacer — makes browser scroll without moving the stage */}
-      <div style={{ height: '250vh', pointerEvents: 'none', position: 'relative', zIndex: -1 }} />
-
+    <div className="w-full bg-[#040103] text-slate-100 selection:bg-red-600 selection:text-white">
       {/* ═══════════════════════════════════════════════════════════════════════
-          FIXED FULL-VIEWPORT STAGE
+          HERO STAGE VIEWPORT (Full Screen Landing)
       ═══════════════════════════════════════════════════════════════════════ */}
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className="fixed inset-0 w-full h-full bg-[#040103] select-none overflow-hidden"
-        style={{ zIndex: 10 }}
+        className="relative w-full h-screen min-h-[700px] bg-[#040103] select-none overflow-hidden"
       >
 
         {/* ── LAYER 0: Static crimson nebula radial glow ─────────────────────── */}
@@ -138,21 +150,28 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
         {/* ── Canvas: embers, constellations, shooting stars, cursor trail ────── */}
         <CrimsonParticlesCanvas staffBurst={staffBurst} cursorPosition={cursorPos} />
 
-        {/* ── LAYER 1: Huge "NOVA" title with glitch shimmer ──────────────────── */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 overflow-hidden">
+        {/* ── LAYER 1: Huge "NOVA" title — static until Enter pressed ──────────── */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 overflow-hidden">
           <div className="w-full flex items-center justify-between px-4 sm:px-12 md:px-20
                           font-cinzel font-black tracking-[-0.03em] text-[18vw] leading-none
                           uppercase select-none" style={{ filter: 'blur(0.4px)' }}>
             {['N', 'O', 'V', 'A'].map((l, i) => (
               <span
                 key={l}
-                className={`nova-letter nova-shimmer drop-shadow-[0_0_60px_rgba(220,38,38,0.45)]`}
-                style={{ animationDelay: `${i * 0.7}s` }}
+                className={`nova-letter${novaEntered ? ' nova-letter--live' : ''} drop-shadow-[0_0_60px_rgba(220,38,38,0.45)]`}
               >
                 {l}
               </span>
             ))}
           </div>
+
+          {/* "Press Enter" prompt — visible only before activation */}
+          {!novaEntered && (
+            <div className="press-enter-prompt mt-6 flex items-center gap-3 text-slate-400 font-mono text-sm tracking-[0.3em] uppercase">
+              <span className="inline-block w-5 h-5 border border-slate-500 rounded-sm flex items-center justify-center text-[10px] font-bold text-slate-500">↵</span>
+              <span>Press Enter to Awaken</span>
+            </div>
+          )}
         </div>
 
         {/* ── Floating ambient rune symbols ───────────────────────────────────── */}
@@ -195,11 +214,11 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
                               bg-gradient-to-b from-red-600/20 via-amber-900/10 to-transparent
                               blur-[60px] hair-aura pointer-events-none z-0" />
 
-              {/* Artwork */}
+              {/* Master Artwork Image */}
               <img
                 src="/nova-showcase.jpg"
                 alt="NOVA Celestial Sorceress"
-                className={`w-full h-full object-cover object-center filter contrast-[1.1] brightness-[1.04]
+                className={`w-full h-full object-cover object-center filter contrast-[1.08] brightness-[1.03]
                             ${tx('delay-200')} ${mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-[1.02]'}`}
                 style={{ transform: 'scale(1.05)', position: 'relative', zIndex: 1 }}
               />
@@ -456,47 +475,62 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
           </div>
         </div>
 
-        {/* ── Scroll indicator & Know More CTA Button ──────────────────────────── */}
+        {/* ── Scroll indicator & Action CTAs ───────────────────────────────────── */}
         <div
-          className={`absolute bottom-[4.8rem] left-1/2 -translate-x-1/2 z-40
-                      flex flex-col items-center gap-2 transition-all duration-500`}
+          className={`absolute bottom-[4.6rem] left-1/2 -translate-x-1/2 z-40
+                      flex flex-wrap items-center justify-center gap-3 transition-all duration-500 max-w-[90vw]`}
         >
+          {/* Primary CTA: Scroll down to landscape Story Timeline */}
+          <button
+            onClick={() => {
+              soundFx.playChime();
+              const elem = document.getElementById('nova-timeline');
+              if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group px-6 py-3 rounded-full border-2 border-amber-400/90 bg-gradient-to-r from-red-950/90 via-amber-950/80 to-purple-950/90
+                       hover:from-red-900 hover:to-purple-900 text-amber-200 hover:text-white text-xs font-serif font-bold tracking-[0.2em] uppercase
+                       shadow-[0_0_30px_rgba(251,191,36,0.45)] hover:shadow-[0_0_45px_rgba(251,191,36,0.7)] hover:scale-105 transition-all
+                       backdrop-blur-md flex items-center gap-2.5 cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform" />
+            <span>EXPLORE STORY &amp; BATTLES</span>
+            <ChevronDown className="w-4 h-4 text-amber-400 animate-bounce" />
+          </button>
+
+          {/* Secondary CTA: Go to Weapons & Lore page */}
           <button
             onClick={() => {
               soundFx.playChime();
               onNavigate?.('weapons');
             }}
-            className="group px-7 py-3 rounded-full border-2 border-amber-400/90 bg-gradient-to-r from-red-950/90 via-amber-950/80 to-purple-950/90
-                       hover:from-red-900 hover:to-purple-900 text-amber-200 hover:text-white text-xs font-serif font-bold tracking-[0.2em] uppercase
-                       shadow-[0_0_30px_rgba(251,191,36,0.45)] hover:shadow-[0_0_45px_rgba(251,191,36,0.7)] hover:scale-105 transition-all
-                       backdrop-blur-md flex items-center gap-3 cursor-pointer"
+            className="hidden sm:flex px-5 py-3 rounded-full border border-white/20 bg-black/60 hover:bg-white/10
+                       text-slate-300 hover:text-white text-xs font-mono font-semibold tracking-wider uppercase
+                       backdrop-blur-md items-center gap-2 transition-all hover:border-amber-400/50"
           >
-            <Sparkles className="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform" />
-            <span>KNOW MORE ABOUT NOVA</span>
-            <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform" />
+            <span>Weapons &amp; Lore</span>
+            <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
           </button>
-
-
         </div>
 
         {/* Side scroll hints */}
         <div
-          className={`absolute bottom-[5.5rem] left-8 z-40 pointer-events-none hidden md:block transition-all duration-500`}
+          className={`absolute bottom-[5.2rem] left-8 z-40 pointer-events-none hidden md:block transition-all duration-500`}
           style={{ opacity: Math.max(0, 1 - scrollY / 90) }}
         >
           <div className="flex items-center gap-3">
             <div className="w-8 h-[1px] bg-amber-400/60" />
-            <span className="text-[10px] font-mono tracking-[0.35em] text-amber-200/60 uppercase">
-              SCROLL
+            <span className="text-[10px] font-mono tracking-[0.35em] text-amber-200/60 uppercase flex items-center gap-1.5">
+              <span>SCROLL DOWN</span>
+              <ChevronDown className="w-3 h-3 text-amber-400 animate-bounce" />
             </span>
           </div>
         </div>
         <div
-          className="absolute bottom-[5.5rem] right-8 z-40 pointer-events-none hidden lg:block transition-all duration-500"
+          className="absolute bottom-[5.2rem] right-8 z-40 pointer-events-none hidden lg:block transition-all duration-500"
           style={{ opacity: Math.max(0, 1 - scrollY / 90) }}
         >
           <span className="text-[10px] font-mono tracking-[0.4em] text-amber-400/40 uppercase">
-            THE CELESTIAL WEAVER AWAITS
+            STORY CHRONICLES BELOW
           </span>
         </div>
 
@@ -533,16 +567,30 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
               <button onClick={() => { soundFx.playChime(); setIsCodexOpen(true); }}
                 className="text-red-400 hover:text-red-300 transition-colors flex items-center gap-1 font-semibold">
                 <BookOpen className="w-3.5 h-3.5" />
-                <span>Write Story Notes</span>
+                <span>Codex Chronicles</span>
               </button>
             </div>
           </div>
         </footer>
 
-        {/* ── Codex Drawer ─────────────────────────────────────────────────────── */}
-        <CodexDrawer isOpen={isCodexOpen} onClose={() => setIsCodexOpen(false)} />
-
       </div>
-    </>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          NOVA'S STORY TIMELINE (LANDSCAPE MODE WITH BATTLES)
+      ═══════════════════════════════════════════════════════════════════════ */}
+      <NovaStoryTimeline onNavigate={onNavigate} />
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          GLOBAL FOOTER
+      ═══════════════════════════════════════════════════════════════════════ */}
+      <Footer
+        onOpenConsole={onOpenConsole}
+        onTriggerSafety={onTriggerSafety}
+      />
+
+      {/* ── Codex Drawer ─────────────────────────────────────────────────────── */}
+      <CodexDrawer isOpen={isCodexOpen} onClose={() => setIsCodexOpen(false)} />
+
+    </div>
   );
 }

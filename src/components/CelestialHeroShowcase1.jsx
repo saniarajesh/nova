@@ -216,12 +216,12 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted 
                               bg-gradient-to-b from-red-600/20 via-amber-900/10 to-transparent
                               blur-[60px] hair-aura pointer-events-none z-0" />
 
-                            {/* Artwork */}
+                            {/* Master Artwork Image */}
                             <img
                                 src="/nova-showcase.jpg"
                                 alt="NOVA Celestial Sorceress"
                                 loading="eager"
-                                className={`w-full h-full object-cover object-center filter contrast-[1.1] brightness-[1.04]
+                                className={`w-full h-full object-cover object-center filter contrast-[1.08] brightness-[1.03]
                             ${tx('delay-200')} ${mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-[1.02]'}`}
                                 style={{ transform: 'scale(1.05)', position: 'relative', zIndex: 1 }}
                             />

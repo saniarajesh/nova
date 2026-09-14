@@ -47,6 +47,8 @@ export default function App() {
             onNavigate={handleNavigate}
             isMuted={isMuted}
             setIsMuted={setIsMuted}
+            onOpenConsole={() => setIsConsoleOpen(true)}
+            onTriggerSafety={() => setIsSafetyOpen(true)}
           />
         )}
 
