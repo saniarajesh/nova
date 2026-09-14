@@ -4,7 +4,7 @@ import { Sparkles, CheckCircle2, Download, Radio, Shield, Share2, RefreshCw } fr
 import jsPDF from 'jspdf';
 import { soundFx } from '../utils/soundEffects';
 
-export default function BeaconReceipt({ beaconData, onReset, onOpenConsole }) {
+export default function BeaconReceipt({ beaconData, onReset }) {
   useEffect(() => {
     soundFx.playTransmission();
 

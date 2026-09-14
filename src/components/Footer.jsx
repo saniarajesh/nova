@@ -1,8 +1,8 @@
 import React from 'react';
-import { Sparkles, Radio, Heart, Shield, Terminal, ArrowUp } from 'lucide-react';
+import { Sparkles, Radio, Heart, Shield, ArrowUp } from 'lucide-react';
 import { soundFx } from '../utils/soundEffects';
 
-export default function Footer({ onOpenConsole, onTriggerSafety }) {
+export default function Footer({ onTriggerSafety }) {
   const scrollToTop = () => {
     soundFx.playChime();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -69,15 +69,6 @@ export default function Footer({ onOpenConsole, onTriggerSafety }) {
               >
                 <Heart className="w-3.5 h-3.5" />
                 <span>Crisis Lifelines</span>
-              </button>
-            </div>
-            <div>
-              <button
-                onClick={onOpenConsole}
-                className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1 text-left font-mono"
-              >
-                <Terminal className="w-3.5 h-3.5" />
-                <span>Guardian Console (Admin)</span>
               </button>
             </div>
             <div>

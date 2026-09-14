@@ -6,7 +6,6 @@ import HeroPosterPage from './components/HeroPosterPage';
 import WeaponsLorePage from './components/WeaponsLorePage';
 import ChatGptPortal from './components/ChatGptPortal';
 import BeaconReceipt from './components/BeaconReceipt';
-import GuardianConsole from './components/GuardianConsole';
 import SafetyModal from './components/SafetyModal';
 import Footer from './components/Footer';
 import { MessageSquare, Sparkles } from 'lucide-react';
@@ -16,7 +15,6 @@ export default function App() {
   const [activePage, setActivePage] = useState('hero'); // 'hero' | 'weapons' | 'chat'
   const [isMuted, setIsMuted] = useState(true);
   const [submittedBeacon, setSubmittedBeacon] = useState(null);
-  const [isConsoleOpen, setIsConsoleOpen] = useState(false);
   const [isSafetyOpen, setIsSafetyOpen] = useState(false);
 
   const handleNavigate = (page) => {
@@ -47,7 +45,6 @@ export default function App() {
             onNavigate={handleNavigate}
             isMuted={isMuted}
             setIsMuted={setIsMuted}
-            onOpenConsole={() => setIsConsoleOpen(true)}
             onTriggerSafety={() => setIsSafetyOpen(true)}
           />
         )}
@@ -64,7 +61,6 @@ export default function App() {
               <BeaconReceipt
                 beaconData={submittedBeacon}
                 onReset={() => setSubmittedBeacon(null)}
-                onOpenConsole={() => setIsConsoleOpen(true)}
               />
             ) : (
               <ChatGptPortal
@@ -80,17 +76,11 @@ export default function App() {
       {/* Footer (Rendered on Weapons & AI Chat pages) */}
       {activePage !== 'hero' && (
         <Footer
-          onOpenConsole={() => setIsConsoleOpen(true)}
           onTriggerSafety={() => setIsSafetyOpen(true)}
         />
       )}
 
       {/* Modals */}
-      <GuardianConsole
-        isOpen={isConsoleOpen}
-        onClose={() => setIsConsoleOpen(false)}
-      />
-
       <SafetyModal
         isOpen={isSafetyOpen}
         onClose={() => setIsSafetyOpen(false)}

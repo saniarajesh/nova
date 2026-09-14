@@ -7,7 +7,7 @@ import NovaStoryTimeline from './NovaStoryTimeline';
 import Footer from './Footer';
 import { soundFx } from '../utils/soundEffects';
 
-export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted, onOpenConsole, onTriggerSafety }) {
+export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted, onTriggerSafety }) {
   const [isAwakened, setIsAwakened] = useState(false);
   const [isCodexOpen, setIsCodexOpen] = useState(false);
   const [hideHud, setHideHud] = useState(false);
@@ -584,7 +584,6 @@ export default function CelestialHeroShowcase({ onNavigate, isMuted, setIsMuted,
           GLOBAL FOOTER
       ═══════════════════════════════════════════════════════════════════════ */}
       <Footer
-        onOpenConsole={onOpenConsole}
         onTriggerSafety={onTriggerSafety}
       />
 
