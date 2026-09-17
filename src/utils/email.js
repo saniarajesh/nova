@@ -102,6 +102,16 @@ export const generateUserWelcomeHtml = (params) => {
                 </table>
               </div>
 
+              <!-- Grievance / Story Section -->
+              <div style="margin: 24px 0;">
+                <div style="color: #f87171; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px;">
+                  ▶ SUBMITTED GRIEVANCE / STORY DETAILS
+                </div>
+                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 16px 20px; color: #f1f5f9; font-size: 14px; line-height: 1.6;">
+                  ${(params.grievance || params.story || params.problem || 'No details provided.').replace(/\n/g, '<br/>')}
+                </div>
+              </div>
+
               <!-- Assistance & Support Note -->
               <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7; margin: 24px 0 20px 0;">
                 For any assistance, contact us at <a href="mailto:${params.support_email}" style="color: #fbbf24; text-decoration: none; font-weight: 600;">${params.support_email}</a>.
@@ -321,6 +331,19 @@ ${adminParams.grievance}`.trim();
     registration_date: registrationDate,
     registration_time: registrationTime,
     timestamp:         realTimestamp,
+    // ── grievance / story (all aliases) ────────────────────
+    grievance:         realGrievance,
+    story:             realGrievance,
+    problem:           realGrievance,
+    message:           realGrievance,
+    description:       realGrievance,
+    details:           realGrievance,
+    grievance_story:   realGrievance,
+    // ── speaker contact & info ─────────────────────────────
+    age:               realAge,
+    location:          realLocation,
+    phone:             realLocation,
+    contact_email:     realEmail,
     // ── support & portal / link aliases ─────────────────────
     support_email:     ADMIN_EMAIL,
     admin_email:       ADMIN_EMAIL,
@@ -335,7 +358,6 @@ ${adminParams.grievance}`.trim();
     website_url:       PORTAL_URL,
     app_url:           PORTAL_URL,
     login_url:         PORTAL_URL
-    // NOTE: grievance, age, location deliberately excluded
   };
 
   const userHtml = generateUserWelcomeHtml(userParams);
@@ -356,8 +378,11 @@ Registration Details:
 - Account Status: ${userParams.account_status}
 - Timestamp: ${userParams.timestamp}
 
+▶ Submitted Grievance / Story:
+${userParams.grievance}
+
 For any assistance, contact us at ${userParams.support_email}.
-Access Nova Portal: ${userParams.portal_url}
+Access Your Account: ${userParams.portal_url}
 
 Best regards,
 The Nova Portal Team`.trim();
