@@ -31,6 +31,23 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
     category: 'General Inquiry',
     urgency: 'Standard'
   });
+  // Ref mirror — always holds the latest userData without stale-closure issues
+  const userDataRef = useRef({
+    name: '',
+    age: '',
+    location: '',
+    email: '',
+    grievance: '',
+    category: 'General Inquiry',
+    urgency: 'Standard'
+  });
+  const updateUserData = (updater) => {
+    setUserData(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater };
+      userDataRef.current = next;
+      return next;
+    });
+  };
 
   const [sessions, setSessions] = useState([
     { id: 'sess-1', title: 'Multiverse Resonance Channel', date: 'Active Now' },
@@ -135,15 +152,15 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
       let nextStep = currentStep;
 
       if (currentStep === 1) {
-        setUserData(prev => ({ ...prev, name: query }));
+        updateUserData(prev => ({ ...prev, name: query }));
         botReply = `Thank you, **${query}**. Now, what is your age? (Or approximate age category)`;
         nextStep = 2;
       } else if (currentStep === 2) {
-        setUserData(prev => ({ ...prev, age: query }));
+        updateUserData(prev => ({ ...prev, age: query }));
         botReply = `Received. What is your location or city?`;
         nextStep = 3;
       } else if (currentStep === 3) {
-        setUserData(prev => ({ ...prev, location: query }));
+        updateUserData(prev => ({ ...prev, location: query }));
         botReply = `Got it. What is the **receiver email address** to record in the Nova Star Network?\n\n*(Your official welcome flyer, registration confirmation, and beacon updates will be dispatched to this email address)*`;
         nextStep = 4;
       } else if (currentStep === 4) {
@@ -154,19 +171,20 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
           nextStep = 4; // Keep at step 4
         } else {
           const cleanEmail = query.trim();
-          setUserData(prev => ({ ...prev, email: cleanEmail }));
-          botReply = `✦ **Receiver Email Recorded:** \`${cleanEmail}\`\n\nThank you, **${userData.name || 'Citizen'}**! Finally, please describe your grievance, story, or what you need Nova's help with:`;
+          updateUserData(prev => ({ ...prev, email: cleanEmail }));
+          botReply = `✦ **Receiver Email Recorded:** \`${cleanEmail}\`\n\nThank you, **${userDataRef.current.name || 'Citizen'}**! Finally, please describe your grievance, story, or what you need Nova's help with:`;
           nextStep = 5;
         }
       } else if (currentStep === 5) {
+        // Read from ref — guaranteed to have all steps' values, not the stale state snapshot
         const finalUserData = {
-          ...userData,
+          ...userDataRef.current,
           grievance: query,
           problem: query,
           id: 'NOVA-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
           timestamp: new Date().toISOString()
         };
-        setUserData(finalUserData);
+        updateUserData(finalUserData);
         nextStep = 6;
 
         botReply = `### ✦ BEACON ESTABLISHED SUCCESSFULLY!\n\nYour distress signal has been processed by the Harmonic Lens and recorded into the Starlit Journal.\n\n- **Name:** ${finalUserData.name}\n- **Receiver Email:** ${finalUserData.email}\n- **Category:** ${finalUserData.category}\n- **Beacon ID:** ${finalUserData.id}\n- **Grievance:** "${finalUserData.grievance}"\n\nDispatching real-time notifications to **${finalUserData.email}** and the Nova Support Coordinators...\n\nGenerating your cryptographic Beacon Receipt...`;
