@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ParticleBackground from './components/ParticleBackground';
 import Navbar from './components/Navbar';
 import CelestialHeroShowcase from './components/CelestialHeroShowcase';
@@ -16,6 +16,27 @@ export default function App() {
   const [isMuted, setIsMuted] = useState(true);
   const [submittedBeacon, setSubmittedBeacon] = useState(null);
   const [isSafetyOpen, setIsSafetyOpen] = useState(false);
+
+  // Read ?page=receipt&beacon=...&name=...&email=... from email CTA link
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('page') === 'receipt' && params.get('beacon')) {
+      setSubmittedBeacon({
+        id:        params.get('beacon'),
+        name:      params.get('name')      || 'Citizen',
+        email:     params.get('email')     || '',
+        age:       params.get('age')       || 'N/A',
+        location:  params.get('location')  || 'N/A',
+        category:  params.get('category')  || 'General Inquiry',
+        urgency:   params.get('urgency')   || 'Standard',
+        grievance: params.get('grievance') || '',
+        timestamp: params.get('ts')        || new Date().toISOString()
+      });
+      setActivePage('chat');
+      // Clean the URL without reloading so the params don't persist on refresh
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
 
   const handleNavigate = (page) => {
     soundFx.playChime();

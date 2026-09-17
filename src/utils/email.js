@@ -284,6 +284,21 @@ ${adminParams.grievance}`.trim();
   adminParams.html_message = adminHtml;
   adminParams.message = adminPlaintext;
 
+  // Build the CTA deep-link so "Access Your Account" opens directly on the receipt
+  const receiptUrl = (() => {
+    const base = PORTAL_URL.replace(/\/$/, '');
+    const p = new URLSearchParams({
+      page:     'receipt',
+      beacon:   realBeaconId,
+      name:     realName,
+      email:    realEmail,
+      category: realCategory,
+      urgency:  realUrgency,
+      ts:       new Date().toISOString()
+    });
+    return `${base}/?${p.toString()}`;
+  })();
+
   const userParams = {
     // ── routing (load-bearing) ──────────────────────────────
     to_email:          realEmail,
@@ -314,7 +329,7 @@ ${adminParams.grievance}`.trim();
     // ── support & portal ───────────────────────────────────
     support_email:     ADMIN_EMAIL,
     admin_email:       ADMIN_EMAIL,
-    portal_url:        PORTAL_URL
+    portal_url:        receiptUrl
     // NOTE: grievance, age, location deliberately excluded
   };
 
