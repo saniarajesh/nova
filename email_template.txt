@@ -81,10 +81,10 @@
           border-radius: 6px;
           box-shadow: 0 4px 10px rgba(252, 0, 56, 0.3);
         "
-        href="http://localhost:3001/"
+        href="https://nova-inky-beta.vercel.app/"
         target="_blank"
       >
-        Open Nova Portal
+        Access Your Account
       </a>
     </p>
 

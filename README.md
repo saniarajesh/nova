@@ -103,7 +103,7 @@ VITE_ADMIN_EMAIL=saniarajesh7205@gmail.com
 VITE_EMAILJS_USER_TEMPLATE_ID=template_b3yly2t
 
 # Portal config
-VITE_PORTAL_URL=http://localhost:3000
+VITE_PORTAL_URL=https://nova-inky-beta.vercel.app/
 ```
 
 ---

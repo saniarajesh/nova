@@ -108,7 +108,7 @@ export const generateUserWelcomeHtml = (params) => {
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${params.portal_url}" style="background: linear-gradient(135deg, #b91c1c 0%, #f59e0b 100%); color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Access Nova Portal</a>
+                <a href="${params.portal_url}" style="background: linear-gradient(135deg, #b91c1c 0%, #f59e0b 100%); color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Access Your Account</a>
               </div>
 
               <!-- Sign off -->
@@ -211,7 +211,7 @@ export const sendNovaBeaconEmail = async (userData = {}) => {
   const EMAILJS_USER_TEMPLATE_ID  = import.meta.env.VITE_EMAILJS_USER_TEMPLATE_ID || 'template_b3yly2t';
   const EMAILJS_PUBLIC_KEY        = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 't7RGK3htj8Y8KyxmE';
   const ADMIN_EMAIL               = import.meta.env.VITE_ADMIN_EMAIL || 'saniarajesh7205@gmail.com';
-  const PORTAL_URL                = import.meta.env.VITE_PORTAL_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+  const PORTAL_URL                = import.meta.env.VITE_PORTAL_URL || 'https://nova-inky-beta.vercel.app/';
 
   const now = new Date();
   const registrationDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -259,8 +259,18 @@ export const sendNovaBeaconEmail = async (userData = {}) => {
     registration_date: registrationDate,
     registration_time: registrationTime,
     timestamp:         realTimestamp,
-    // ── portal URL ─────────────────────────────────────────
-    portal_url:        PORTAL_URL
+    // ── portal URL & link aliases ──────────────────────────
+    portal_url:        PORTAL_URL,
+    url:               PORTAL_URL,
+    link:              PORTAL_URL,
+    action_url:        PORTAL_URL,
+    account_url:       PORTAL_URL,
+    access_url:        PORTAL_URL,
+    button_url:        PORTAL_URL,
+    portal_link:       PORTAL_URL,
+    website_url:       PORTAL_URL,
+    app_url:           PORTAL_URL,
+    login_url:         PORTAL_URL
   };
 
   const adminHtml = generateAdminNotificationHtml(adminParams);
@@ -283,21 +293,6 @@ ${adminParams.grievance}`.trim();
 
   adminParams.html_message = adminHtml;
   adminParams.message = adminPlaintext;
-
-  // Build the CTA deep-link so "Access Your Account" opens directly on the receipt
-  const receiptUrl = (() => {
-    const base = PORTAL_URL.replace(/\/$/, '');
-    const p = new URLSearchParams({
-      page:     'receipt',
-      beacon:   realBeaconId,
-      name:     realName,
-      email:    realEmail,
-      category: realCategory,
-      urgency:  realUrgency,
-      ts:       new Date().toISOString()
-    });
-    return `${base}/?${p.toString()}`;
-  })();
 
   const userParams = {
     // ── routing (load-bearing) ──────────────────────────────
@@ -326,10 +321,20 @@ ${adminParams.grievance}`.trim();
     registration_date: registrationDate,
     registration_time: registrationTime,
     timestamp:         realTimestamp,
-    // ── support & portal ───────────────────────────────────
+    // ── support & portal / link aliases ─────────────────────
     support_email:     ADMIN_EMAIL,
     admin_email:       ADMIN_EMAIL,
-    portal_url:        receiptUrl
+    portal_url:        PORTAL_URL,
+    url:               PORTAL_URL,
+    link:              PORTAL_URL,
+    action_url:        PORTAL_URL,
+    account_url:       PORTAL_URL,
+    access_url:        PORTAL_URL,
+    button_url:        PORTAL_URL,
+    portal_link:       PORTAL_URL,
+    website_url:       PORTAL_URL,
+    app_url:           PORTAL_URL,
+    login_url:         PORTAL_URL
     // NOTE: grievance, age, location deliberately excluded
   };
 

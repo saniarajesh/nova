@@ -1,4 +1,4 @@
-# Nova Portal — EmailJS Variable Wiring Reference
+# Nova Portal â€” EmailJS Variable Wiring Reference
 
 > Repo: `nova-portal`. Client-side React/Vite app, no backend.
 > Every completed beacon fires **two emails** from `src/utils/email.js`.
@@ -19,7 +19,7 @@ A value that exists in only one of those links **renders blank**. Nothing warns 
 
 ---
 
-## Env Vars (`.env`, gitignored — `.env.example` is the tracked copy)
+## Env Vars (`.env`, gitignored â€” `.env.example` is the tracked copy)
 
 | Var | Value in use | Consumed at | Notes |
 |---|---|---|---|
@@ -28,7 +28,7 @@ A value that exists in only one of those links **renders blank**. Nothing warns 
 | `VITE_EMAILJS_ADMIN_TEMPLATE_ID` | `template_7o5tasj` | admin send | dashboard name "Admin Triage" (was "Welcome") |
 | `VITE_EMAILJS_USER_TEMPLATE_ID` | `template_b3yly2t` | user send | dashboard name "User Welcome" (was "Auto-Reply") |
 | `VITE_ADMIN_EMAIL` | `saniarajesh7205@gmail.com` | admin `to_email`, user `reply_to`/`support_email` | |
-| `VITE_PORTAL_URL` | `http://localhost:3000` | `portal_url` in both | **change to the deployed URL before shipping**; falls back to `window.location.origin` |
+| `VITE_PORTAL_URL` | `https://nova-inky-beta.vercel.app/` | `portal_url` in both | Live website URL |
 
 > **Security note.** Every `VITE_*` value is inlined into `dist/assets/*.js` at build time
 > and is readable by anyone who opens the site. That is inherent to browser-side EmailJS.
@@ -37,17 +37,17 @@ A value that exists in only one of those links **renders blank**. Nothing warns 
 
 ---
 
-## Template 1 — Admin Triage (`template_7o5tasj`)
+## Template 1 â€” Admin Triage (`template_7o5tasj`)
 
 **Source file:** `email-templates/admin-template_7o5tasj.html`
 **Dashboard settings verified:** 2026-09-17
 
 | Setting | Value |
 |---|---|
-| Subject | `New Registration Received — Nova Portal` |
+| Subject | `New Registration Received â€” Nova Portal` |
 | To Email | `{{to_email}}` ? probe-verified |
-| Reply To | `{{reply_to}}` (changed from hardcoded address — replies now reach the speaker) |
-| Bcc | *(cleared — was `{{admin_email}}`, which duplicated every mail to admin)* |
+| Reply To | `{{reply_to}}` (changed from hardcoded address â€” replies now reach the speaker) |
+| Bcc | *(cleared â€” was `{{admin_email}}`, which duplicated every mail to admin)* |
 | From Email | Use Default Email Address |
 
 ### Placeholder ? Param ? Origin Map
@@ -72,7 +72,7 @@ A value that exists in only one of those links **renders blank**. Nothing warns 
 
 ---
 
-## Template 2 — User Welcome (`template_b3yly2t`)
+## Template 2 â€” User Welcome (`template_b3yly2t`)
 
 **Source file:** `email-templates/user-template_b3yly2t.html`
 **Dashboard settings verified:** 2026-09-17
@@ -91,7 +91,7 @@ A value that exists in only one of those links **renders blank**. Nothing warns 
 | `{{to_email}}` | `to_email` | the address the user typed at step 4 |
 | `{{name}}` | `name` | step 1 |
 | `{{user_name}}` | `user_name` | alias of `name` |
-| `{{beacon_id}}` | `beacon_id` | same ID as the admin mail — they pair up |
+| `{{beacon_id}}` | `beacon_id` | same ID as the admin mail â€” they pair up |
 | `{{classification}}` | `classification` | alias of `category` |
 | `{{role}}` | `role` | alias of `category` |
 | `{{urgency}}` / `{{priority}}` | `urgency` / `priority` | step-5 classification |
@@ -105,7 +105,7 @@ A value that exists in only one of those links **renders blank**. Nothing warns 
 
 ---
 
-## Aliases — Why Duplicates Exist
+## Aliases â€” Why Duplicates Exist
 
 Each payload sends several names for the same value (`name`/`full_name`/`user_name`,
 `id`/`beacon_id`/`user_id`, `category`/`role`, `grievance`/`problem`,
@@ -113,13 +113,13 @@ Each payload sends several names for the same value (`name`/`full_name`/`user_na
 by hand and a renamed placeholder would otherwise render blank with no error. The aliases
 cost nothing.
 
-`to_email` is the one that is genuinely load-bearing — remove it and the API returns
+`to_email` is the one that is genuinely load-bearing â€” remove it and the API returns
 `422 The recipients address is empty`.
 
 Both templates also receive `message`/`content` (plaintext) and `html_message`
 (pre-rendered HTML from the generator functions). They are unused while the dashboard
 templates hold their own markup. To switch a template to the code-generated body instead,
-set its Content to `{{{html_message}}}` — triple braces, or the HTML arrives escaped.
+set its Content to `{{{html_message}}}` â€” triple braces, or the HTML arrives escaped.
 
 ---
 
@@ -140,7 +140,7 @@ set its Content to `{{{html_message}}}` — triple braces, or the HTML arrives esc
 ## How to Verify Without Sending Mail
 
 EmailJS rejects non-browser callers on this account (403), so probes need browser headers.
-A deliberately malformed recipient tells you which variable the To field reads —
+A deliberately malformed recipient tells you which variable the To field reads â€”
 `corrupted` means the variable resolved, `empty` means it did not:
 
 ```bash
@@ -159,7 +159,7 @@ Every placeholder needs a source; params with no consumer are the intentional al
 To exercise the real dispatcher in Node, copy `src/utils/email.js` with `import.meta.env`
 rewritten to a `globalThis.__ENV` object, wrap `globalThis.fetch` to inject the three
 browser headers, then call `sendNovaBeaconEmail(...)`. Mock the fetch to test the failure
-paths (invalid recipient, non-2xx, thrown network error) without spending quota — the free
+paths (invalid recipient, non-2xx, thrown network error) without spending quota â€” the free
 tier is 200 requests/month.
 
 ---
@@ -174,9 +174,9 @@ tier is 200 requests/month.
 - The `Admin Triage Email: Delivered|Failed` lines in the downloaded PDF.
 
 **If you change the shape of that return value, these three places change with it:**
-- `src/components/ChatGptPortal.jsx` — dispatch result handler
-- `src/components/BeaconReceipt.jsx` — receipt UI status lines
-- The jsPDF generation block inside `BeaconReceipt.jsx` — PDF status lines
+- `src/components/ChatGptPortal.jsx` â€” dispatch result handler
+- `src/components/BeaconReceipt.jsx` â€” receipt UI status lines
+- The jsPDF generation block inside `BeaconReceipt.jsx` â€” PDF status lines
 
 ---
 

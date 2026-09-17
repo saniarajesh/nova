@@ -1,7 +1,7 @@
-# Nova Portal — EmailJS Master Prompt & Replication Guide
+# Nova Portal â€” EmailJS Master Prompt & Replication Guide
 
 Hand this file to a person or an agent setting the Nova Portal email system up on a new
-machine. It describes the whole pipeline — env, code, payloads, dashboard, verification —
+machine. It describes the whole pipeline â€” env, code, payloads, dashboard, verification â€”
 against the **same EmailJS account and the same two templates** that are live today.
 Nothing here needs to be rediscovered; everything below was verified against the live API
 on 2026-09-17.
@@ -15,8 +15,8 @@ different EmailJS templates**. They are not interchangeable.
 
 | # | Purpose | Template ID | Env var | Recipient | Reply-To | Carries the grievance? |
 |---|---|---|---|---|---|---|
-| 1 | Admin triage alert | `template_7o5tasj` | `VITE_EMAILJS_ADMIN_TEMPLATE_ID` | the admin address | the user | **yes** — full case file |
-| 2 | User welcome / confirmation | `template_b3yly2t` | `VITE_EMAILJS_USER_TEMPLATE_ID` | the address the user typed | the admin | **no** — receipt only |
+| 1 | Admin triage alert | `template_7o5tasj` | `VITE_EMAILJS_ADMIN_TEMPLATE_ID` | the admin address | the user | **yes** â€” full case file |
+| 2 | User welcome / confirmation | `template_b3yly2t` | `VITE_EMAILJS_USER_TEMPLATE_ID` | the address the user typed | the admin | **no** â€” receipt only |
 
 Both go out from the browser. There is no backend, no server key, no queue.
 
@@ -43,13 +43,13 @@ warning, no error, no log. This is the single most important fact about EmailJS.
 
 | Path | Role |
 |---|---|
-| `src/utils/email.js` | `sendNovaBeaconEmail(userData)` — both sends, both HTML generators |
+| `src/utils/email.js` | `sendNovaBeaconEmail(userData)` â€” both sends, both HTML generators |
 | `src/components/ChatGptPortal.jsx` | the only caller; 5-step chat intake, dispatch at step 5 |
 | `src/components/BeaconReceipt.jsx` | renders delivery status, generates the PDF receipt |
 | `email-templates/admin-template_7o5tasj.html` | versioned copy of dashboard template 1 |
 | `email-templates/user-template_b3yly2t.html` | versioned copy of dashboard template 2 |
 | `email-templates/WIRING.md` | concise placeholder/param map and change rules |
-| `.env` | live credentials — **gitignored, never committed** |
+| `.env` | live credentials â€” **gitignored, never committed** |
 | `.env.example` | the tracked template of `.env` |
 
 `src/components/Chatbot.jsx` also contains an intake form but is **not mounted** in
@@ -60,7 +60,7 @@ warning, no error, no log. This is the single most important fact about EmailJS.
 ## 4. Environment
 
 `.env` in the project root. Vite only exposes variables prefixed `VITE_`, and it reads the
-file **at dev-server startup** — restart `npm run dev` after any change.
+file **at dev-server startup** â€” restart `npm run dev` after any change.
 
 ```env
 VITE_EMAILJS_SERVICE_ID=service_7sr3n07
@@ -68,11 +68,11 @@ VITE_EMAILJS_PUBLIC_KEY=t7RGK3htj8Y8KyxmE
 VITE_EMAILJS_ADMIN_TEMPLATE_ID=template_7o5tasj
 VITE_EMAILJS_USER_TEMPLATE_ID=template_b3yly2t
 VITE_ADMIN_EMAIL=saniarajesh7205@gmail.com
-VITE_PORTAL_URL=http://localhost:3000
+VITE_PORTAL_URL=https://nova-inky-beta.vercel.app/
 ```
 
 `src/utils/email.js` hardcodes these same values as fallbacks, so the app still works if
-`.env` is missing — which also means a typo in `.env` fails quietly rather than loudly.
+`.env` is missing â€” which also means a typo in `.env` fails quietly rather than loudly.
 
 **`VITE_PORTAL_URL` is the one to change per environment.** It is the href of the "Open
 Nova Portal" button in both emails. Set it to the deployed URL before shipping; an
@@ -81,7 +81,7 @@ unset value falls back to `window.location.origin`.
 ### Security Reality
 
 Every `VITE_*` value is inlined into `dist/assets/*.js` at build time and is readable by
-anyone who opens the site. That is inherent to browser-side EmailJS — the public key is
+anyone who opens the site. That is inherent to browser-side EmailJS â€” the public key is
 designed to be public. Do not attempt to hide it. Protect the account instead:
 
 - EmailJS dashboard ? Account ? Security ? **domain allowlist** for the deployed domain.
@@ -95,12 +95,12 @@ designed to be public. Do not attempt to hide it. Protect the account instead:
 
 Verified live 2026-09-17 by API probe plus dashboard screenshots.
 
-### Template 1 — Admin Triage, `template_7o5tasj`
+### Template 1 â€” Admin Triage, `template_7o5tasj`
 
 | Dashboard field | Value |
 |---|---|
-| Template name | "Welcome" (misleading — rename to "Admin Triage") |
-| Subject | `New Registration Received — Nova Portal` |
+| Template name | "Welcome" (misleading â€” rename to "Admin Triage") |
+| Subject | `New Registration Received â€” Nova Portal` |
 | To Email | `{{to_email}}` |
 | Reply To | `{{reply_to}}` |
 | Bcc | empty (was `{{admin_email}}`, which duplicated every mail) |
@@ -110,13 +110,13 @@ Placeholders used by the content: `{{to_email}}`, `{{reply_to}}`, `{{admin_email
 `{{name}}`, `{{age}}`, `{{location}}`, `{{email}}`, `{{category}}`, `{{urgency}}`,
 `{{beacon_id}}`, `{{grievance}}`, `{{timestamp}}`, `{{portal_url}}`.
 
-### Template 2 — User Welcome, `template_b3yly2t`
+### Template 2 â€” User Welcome, `template_b3yly2t`
 
 | Dashboard field | Value |
 |---|---|
 | Template name | "Auto-Reply" (rename to "User Welcome") |
 | Subject | `Welcome to Nova Portal` |
-| To Email | `{{to_email}}` — **was `{{user_email}}` until 2026-09-17** |
+| To Email | `{{to_email}}` â€” **was `{{user_email}}` until 2026-09-17** |
 | Reply To | `{{reply_to}}` ? resolves to the admin |
 | From Name | `NOVA TEAM` |
 
@@ -126,13 +126,13 @@ Placeholders used by the content: `{{to_email}}`, `{{user_name}}`, `{{name}}`,
 
 ---
 
-## 6. Variable Map — Payload Key ? Placeholder ? Origin
+## 6. Variable Map â€” Payload Key ? Placeholder ? Origin
 
 ### Admin Payload (`template_7o5tasj`)
 
 | Key sent | Placeholder | Where the value comes from |
 |---|---|---|
-| `to_email` | `{{to_email}}` | `VITE_ADMIN_EMAIL` — **load-bearing** |
+| `to_email` | `{{to_email}}` | `VITE_ADMIN_EMAIL` â€” **load-bearing** |
 | `reply_to` | `{{reply_to}}` | the user's address if it passes `isValidEmail`, else admin |
 | `admin_email` | `{{admin_email}}` | `VITE_ADMIN_EMAIL` |
 | `name`, `full_name`, `user_name` | `{{name}}` | chat intake step 1 |
@@ -146,26 +146,26 @@ Placeholders used by the content: `{{to_email}}`, `{{user_name}}`, `{{name}}`,
 | `beacon_id`, `id`, `user_id` | `{{beacon_id}}` | generated `NOVA-XXXXXXX` at step 5 |
 | `grievance`, `problem` | `{{grievance}}` | step 5 |
 | `timestamp` | `{{timestamp}}` | send time, `en-US` locale |
-| `registration_date`, `registration_time` | — | send time, split |
+| `registration_date`, `registration_time` | â€” | send time, split |
 | `portal_url` | `{{portal_url}}` | `VITE_PORTAL_URL` |
-| `message`, `content` | — | plaintext body, unused while the dashboard holds its own markup |
-| `html_message` | — | pre-rendered HTML from `generateAdminNotificationHtml` |
+| `message`, `content` | â€” | plaintext body, unused while the dashboard holds its own markup |
+| `html_message` | â€” | pre-rendered HTML from `generateAdminNotificationHtml` |
 
 ### User Payload (`template_b3yly2t`)
 
 | Key sent | Placeholder | Where the value comes from |
 |---|---|---|
-| `to_email` | `{{to_email}}` | the address typed at step 4 — **load-bearing** |
+| `to_email` | `{{to_email}}` | the address typed at step 4 â€” **load-bearing** |
 | `reply_to` | `{{reply_to}}` | `VITE_ADMIN_EMAIL` |
 | `name`, `full_name`, `user_name` | `{{user_name}}`, `{{name}}` | step 1 |
-| `beacon_id`, `id`, `user_id` | `{{beacon_id}}` | same ID as the admin mail — they pair up |
+| `beacon_id`, `id`, `user_id` | `{{beacon_id}}` | same ID as the admin mail â€” they pair up |
 | `classification`, `role`, `category` | `{{role}}` | step-5 classification |
 | `urgency`, `priority` | `{{urgency}}` | step-5 classification |
 | `account_status` | `{{account_status}}` | literal `?? Active & Transmitted` |
 | `registration_date`, `registration_time`, `timestamp` | `{{registration_date}}`, `{{registration_time}}` | send time |
 | `support_email`, `admin_email` | `{{support_email}}` | `VITE_ADMIN_EMAIL` |
 | `portal_url` | `{{portal_url}}` | `VITE_PORTAL_URL` |
-| `message`, `content`, `html_message` | — | alternate bodies, unused today |
+| `message`, `content`, `html_message` | â€” | alternate bodies, unused today |
 
 > **This payload must never carry `grievance`, `age` or `location`.** The user mail is a
 > receipt; triage detail belongs only in the admin mail.
@@ -175,17 +175,17 @@ Placeholders used by the content: `{{to_email}}`, `{{user_name}}`, `{{name}}`,
 Several names carry the same value on purpose. The dashboard templates are hand-edited by
 a human, and a renamed placeholder would otherwise render blank with no error anywhere.
 The aliases cost nothing and absorb that class of mistake. `to_email` is the one that is
-genuinely required — remove it and the API answers `422 The recipients address is empty`.
+genuinely required â€” remove it and the API answers `422 The recipients address is empty`.
 
 ### Switching a Template to the Code-Generated HTML
 
 Both payloads carry `html_message`, a fully rendered email built in `src/utils/email.js`.
 To use it instead of the dashboard's own markup, set that template's Content to
-`{{{html_message}}}` — **triple braces**, or the HTML arrives escaped as visible tags.
+`{{{html_message}}}` â€” **triple braces**, or the HTML arrives escaped as visible tags.
 
 ---
 
-## 7. Dispatch Behavior — the Contract
+## 7. Dispatch Behavior â€” the Contract
 
 `sendNovaBeaconEmail(userData)` resolves `{ adminSent, userSent }` and never throws.
 
@@ -200,25 +200,25 @@ To use it instead of the dashboard's own markup, set that template's Content to
 Rules the implementation must keep:
 
 - One `isValidEmail` regex (`/^[^\s@]+@[^\s@]+\.[^\s@]+$/`) drives **both** the
-  user-send gate and the reply-to choice. Never emit a malformed `reply_to` — EmailJS
+  user-send gate and the reply-to choice. Never emit a malformed `reply_to` â€” EmailJS
   answers `422 The recipients address is corrupted`.
 - **600 ms delay** between the two sends, or EmailJS throttles the second one.
-- Independent `try`/`catch` per send — one failure must not suppress the other.
+- Independent `try`/`catch` per send â€” one failure must not suppress the other.
 - The dispatch is **not** conditional on unrelated props. An earlier version sat inside
   `if (onComplete) { ... }`, so a missing callback meant zero emails with no error.
 - `ChatGptPortal` captures the result via `.then(result => setEmailNotificationSent(result))`.
   The receipt renders two status lines from it, and the PDF prints
   `Admin Triage Email: Delivered|Failed` / `User Confirmation Email: Delivered|Not delivered`.
   Changing the return shape means changing all three places:
-  - `src/components/ChatGptPortal.jsx` — dispatch result handler
-  - `src/components/BeaconReceipt.jsx` — receipt UI status lines
-  - The jsPDF generation block inside `BeaconReceipt.jsx` — PDF status lines
+  - `src/components/ChatGptPortal.jsx` â€” dispatch result handler
+  - `src/components/BeaconReceipt.jsx` â€” receipt UI status lines
+  - The jsPDF generation block inside `BeaconReceipt.jsx` â€” PDF status lines
 
 ---
 
 ## 8. Replicating on a New Machine
 
-The EmailJS account, service and both templates already exist and are shared —
+The EmailJS account, service and both templates already exist and are shared â€”
 **do not create new ones**, or the IDs stop matching this document.
 
 ```bash
@@ -251,7 +251,7 @@ retype it from section 4. Do not email it to yourself through this very system.
 ### Which Variable Does a To Email Field Read?
 
 EmailJS rejects non-browser callers on this account, so a probe needs browser headers. A
-deliberately malformed recipient tells you whether the variable resolved — `corrupted`
+deliberately malformed recipient tells you whether the variable resolved â€” `corrupted`
 means yes, `empty` means the field is reading some **other** name:
 
 ```bash
@@ -263,7 +263,7 @@ curl -s -X POST https://api.emailjs.com/api/v1.0/email/send \
        "user_id":"t7RGK3htj8Y8KyxmE","template_params":{"to_email":"bad-addr"}}'
 ```
 
-No mail is sent — the request dies at address validation. Swap `to_email` for any other
+No mail is sent â€” the request dies at address validation. Swap `to_email` for any other
 name to discover what a mystery template actually expects.
 
 ### Placeholder / Param Parity
