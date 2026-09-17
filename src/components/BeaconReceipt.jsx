@@ -39,7 +39,7 @@ export default function BeaconReceipt({ beaconData, onReset }) {
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
-    
+
     const fields = [
       `Beacon ID:       ${beaconData.id}`,
       `Timestamp:       ${new Date(beaconData.timestamp).toLocaleString()}`,
@@ -89,7 +89,7 @@ export default function BeaconReceipt({ beaconData, onReset }) {
 
   return (
     <div className="w-full max-w-2xl mx-auto rounded-3xl glass-panel border border-red-500/40 p-6 sm:p-10 shadow-[0_0_40px_rgba(239,68,68,0.2)] bg-gradient-to-b from-[#1a0505] to-[#0a0000] animate-in zoom-in-95 duration-500 relative overflow-hidden">
-      
+
       {/* Subtle background glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -139,9 +139,8 @@ export default function BeaconReceipt({ beaconData, onReset }) {
         </div>
         <div className="p-3.5 rounded-xl bg-black/40 border border-red-900/40">
           <span className="text-red-400 block mb-1">Urgency Level</span>
-          <span className={`font-bold text-sm uppercase ${
-            beaconData.urgency?.toLowerCase() === 'critical' ? 'text-red-500' : 'text-amber-400'
-          }`}>
+          <span className={`font-bold text-sm uppercase ${beaconData.urgency?.toLowerCase() === 'critical' ? 'text-red-500' : 'text-amber-400'
+            }`}>
             {beaconData.urgency || 'Standard'}
           </span>
         </div>
@@ -176,11 +175,21 @@ export default function BeaconReceipt({ beaconData, onReset }) {
         </button>
 
         <button
-          onClick={() => {
-            soundFx.playClick();
-            onReset();
+          type="button"
+          id="submit-another-story-btn"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+              soundFx.playClick();
+            } catch (err) {
+              // ignore audio error
+            }
+            if (onReset) {
+              onReset();
+            }
           }}
-          className="py-3 px-6 rounded-xl bg-gradient-to-r from-red-700 to-amber-600 hover:from-red-600 hover:to-amber-500 text-white font-bold text-xs sm:text-sm transition-all shadow-[0_0_20px_rgba(239,68,68,0.4)] flex items-center justify-center gap-2"
+          className="py-3 px-6 rounded-xl bg-gradient-to-r from-red-700 to-amber-600 hover:from-red-600 hover:to-amber-500 text-white font-bold text-xs sm:text-sm transition-all shadow-[0_0_20px_rgba(239,68,68,0.4)] flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
         >
           <RefreshCw className="w-4 h-4" />
           <span>Submit Another Story</span>

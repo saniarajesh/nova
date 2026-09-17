@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Send, Sparkles, User, Radio, Mail, MapPin, Calendar, 
-  ShieldCheck, AlertCircle, Plus, MessageSquare, Trash2, 
+import {
+  Send, Sparkles, User, Radio, Mail, MapPin, Calendar,
+  ShieldCheck, AlertCircle, Plus, MessageSquare, Trash2,
   Info, Volume2, VolumeX, Download, CheckCircle2, ChevronRight, ExternalLink, ArrowRight, Compass, Zap
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -140,19 +140,27 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
         nextStep = 2;
       } else if (currentStep === 2) {
         setUserData(prev => ({ ...prev, age: query }));
-        botReply = `Received. Location or city where you are located?`;
+        botReply = `Received. What is your location or city?`;
         nextStep = 3;
       } else if (currentStep === 3) {
         setUserData(prev => ({ ...prev, location: query }));
-        botReply = `Got it. What is your contact email address? (So Nova's candidate notification can be dispatched)`;
+        botReply = `Got it. What is the **receiver email address** to record in the Nova Star Network?\n\n*(Your official welcome flyer, registration confirmation, and beacon updates will be dispatched to this email address)*`;
         nextStep = 4;
       } else if (currentStep === 4) {
-        setUserData(prev => ({ ...prev, email: query }));
-        botReply = `Thank you. Finally, please describe your grievance or what you need Nova's help with:`;
-        nextStep = 5;
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(query.trim())) {
+          botReply = `Please provide a valid receiver email address (e.g., \`user@example.com\`) so Nova can record it and dispatch your welcome confirmation:`;
+          nextStep = 4; // Keep at step 4
+        } else {
+          const cleanEmail = query.trim();
+          setUserData(prev => ({ ...prev, email: cleanEmail }));
+          botReply = `✦ **Receiver Email Recorded:** \`${cleanEmail}\`\n\nThank you, **${userData.name || 'Citizen'}**! Finally, please describe your grievance, story, or what you need Nova's help with:`;
+          nextStep = 5;
+        }
       } else if (currentStep === 5) {
-        const finalUserData = { 
-          ...userData, 
+        const finalUserData = {
+          ...userData,
           grievance: query,
           problem: query,
           id: 'NOVA-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
@@ -161,7 +169,7 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
         setUserData(finalUserData);
         nextStep = 6;
 
-        botReply = `### ✦ BEACON ESTABLISHED SUCCESSFULLY!\n\nYour distress signal has been processed by the Harmonic Lens and recorded into the Starlit Journal.\n\n- **Name:** ${finalUserData.name}\n- **Category:** ${finalUserData.category}\n- **Grievance:** "${finalUserData.grievance}"\n\nGenerating your cryptographic Beacon Receipt...`;
+        botReply = `### ✦ BEACON ESTABLISHED SUCCESSFULLY!\n\nYour distress signal has been processed by the Harmonic Lens and recorded into the Starlit Journal.\n\n- **Name:** ${finalUserData.name}\n- **Receiver Email:** ${finalUserData.email}\n- **Category:** ${finalUserData.category}\n- **Beacon ID:** ${finalUserData.id}\n- **Grievance:** "${finalUserData.grievance}"\n\nDispatching real-time notifications to **${finalUserData.email}** and the Nova Support Coordinators...\n\nGenerating your cryptographic Beacon Receipt...`;
 
         confetti({
           particleCount: 100,
@@ -189,12 +197,12 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
           time: 'Just now'
         }
       ]);
-    }, 1200);
+    }, 1000);
   };
 
   return (
     <div className="min-h-screen bg-[#040103] text-slate-100 py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-serif selection:bg-red-600 selection:text-white">
-      
+
       {/* Background celestial glows matching Page 1 */}
       <div className="absolute top-10 left-1/4 w-[600px] h-[600px] bg-red-700/15 rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute top-1/3 right-10 w-[600px] h-[600px] bg-amber-700/12 rounded-full blur-[150px] pointer-events-none" />
@@ -239,10 +247,10 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
 
         {/* ── Main Chat Interface Grid ───────────────────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* Left Sidebar: Orbital Status & Channel Manager */}
           <div className="lg:col-span-4 space-y-6">
-            
+
             {/* Status Radar Card */}
             <div className="p-6 rounded-3xl bg-black/60 border border-red-900/40 backdrop-blur-xl shadow-2xl space-y-4 border-glow">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
@@ -277,7 +285,7 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
                   <span className="text-amber-300 font-bold">STEP {Math.min(currentStep, 5)} OF 5</span>
                 </div>
                 <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-r from-red-600 via-amber-500 to-purple-600 rounded-full transition-all duration-500"
                     style={{ width: `${(Math.min(currentStep, 5) / 5) * 100}%` }}
                   />
@@ -291,7 +299,7 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
                 ✦ SELECT INTAKE ACTION:
               </span>
               <div className="space-y-2 mt-2 relative">
-                <select 
+                <select
                   onChange={(e) => {
                     if (e.target.value) {
                       const selectedOption = promptStarters.find(s => s.action === e.target.value);
@@ -326,7 +334,7 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
 
           {/* Right Main Chat Window */}
           <div className="lg:col-span-8 flex flex-col h-[650px] rounded-3xl bg-black/65 border border-red-900/50 backdrop-blur-xl shadow-2xl overflow-hidden border-glow">
-            
+
             {/* Chat Top Banner */}
             <div className="p-4 px-6 border-b border-red-950/60 bg-red-950/40 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -378,11 +386,10 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
                   )}
 
                   <div
-                    className={`max-w-[85%] p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
-                      msg.role === 'user'
+                    className={`max-w-[85%] p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${msg.role === 'user'
                         ? 'bg-gradient-to-r from-red-950 via-amber-950 to-purple-950 border border-amber-500/40 text-amber-100 rounded-tr-none shadow-lg'
                         : 'bg-white/[0.04] border border-white/10 text-slate-200 rounded-tl-none backdrop-blur-md'
-                    }`}
+                      }`}
                   >
                     <div className="whitespace-pre-wrap font-serif">
                       {msg.text}
@@ -422,10 +429,22 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
               className="p-4 border-t border-red-950/60 bg-black/80 flex items-center gap-3"
             >
               <input
-                type="text"
+                type={currentStep === 4 ? "email" : "text"}
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="Type your message or details..."
+                placeholder={
+                  currentStep === 1
+                    ? "Enter your name or preferred alias..."
+                    : currentStep === 2
+                    ? "Enter your age..."
+                    : currentStep === 3
+                    ? "Enter your location / city..."
+                    : currentStep === 4
+                    ? "Enter receiver email address to record (e.g. user@gmail.com)..."
+                    : currentStep === 5
+                    ? "Describe your grievance or what Nova can help with..."
+                    : "Type your message or details..."
+                }
                 className="flex-1 bg-white/[0.04] border border-white/15 focus:border-amber-400 rounded-2xl px-4 py-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-400/50 transition-all font-serif"
               />
 

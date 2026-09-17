@@ -114,7 +114,7 @@ class SoundController {
       osc.start(now);
       osc.stop(now + 0.6);
       this._trackSound(0.6);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playShiftForm() {
@@ -141,7 +141,7 @@ class SoundController {
         osc.stop(now + i * 0.06 + 0.4);
       });
       this._trackSound(0.64);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playTransmission() {
@@ -167,7 +167,7 @@ class SoundController {
       osc.start(now);
       osc.stop(now + 0.8);
       this._trackSound(0.8);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playGuitarString(freq = 440) {
@@ -192,7 +192,7 @@ class SoundController {
       osc.start(now);
       osc.stop(now + 1.2);
       this._trackSound(1.2);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playCelestialChord() {
@@ -220,7 +220,7 @@ class SoundController {
         osc.stop(now + 1.4);
       });
       this._trackSound(1.72);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playStaffAwaken() {
@@ -257,7 +257,7 @@ class SoundController {
         osc.stop(t + 0.8);
       });
       this._trackSound(1.1);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playPageTurn() {
@@ -310,7 +310,7 @@ class SoundController {
       osc.stop(now + 0.35);
 
       this._trackSound(0.4);
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 
