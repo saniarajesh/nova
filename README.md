@@ -1,116 +1,156 @@
 # NOVA — The Guardian of Unheard Voices 🌌✨
 
-> *"Every voice deserves to be heard. In the silence of distress, a signal ignites."*
+> *"Every voice deserves to be heard. In the silence of distress, a beacon ignites."*
 
-A superhero web portal and conversational intake application built for individuals facing unresolved grievances, hardships, or requests with nowhere else to turn. 
+[![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5.2.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-NOVA combines **cinematic anime superhero lore** with **real-world advocacy utility**: an empathetic character narrative, dark violet/cyan glassmorphic aesthetics, dual character form-shifting, and an intelligent intake system that captures user stories and dispatches notification alerts.
+An immersive anime-inspired superhero web portal and intelligent conversational grievance intake system designed for individuals facing unresolved grievances, hardships, or unheard cries for help.
+
+NOVA bridges **cinematic anime superhero lore** with **real-world advocacy utility**: an empathetic character narrative, dark violet/cyan glassmorphic aesthetics, 3D interactive artifacts, dual character form-shifting, and an automated intake system that captures stories, generates verifiable cryptographic Beacon IDs with PDF receipts, and dispatches real-time email alerts.
 
 ---
 
-## 🌟 Character Profile: NOVA
+## 🌟 Character Dossier: NOVA
 
-* **Identity**: NOVA (The Guardian of Unheard Voices)
-* **Design Concept**: Inspired by loyal anime companions (such as Paimon from *Genshin Impact*), featuring a floating chibi/fairy guardian with lilac hair, star halo, constellation cape, and audio frequencies.
+* **Identity**: NOVA (The Celestial Guardian of Unheard Voices)
+* **Archetype**: Cosmic Sorceress / Empathic Guardian Companion
+* **Aesthetics**: Floating celestial guardian with lilac hair, star halo, constellation cape, celestial staff, and resonating audio frequencies.
 * **Dual Forms**:
-  * **💜 Harmonic Guide (Compassion Mode)**: Sweet, gentle, welcoming companion who listens and guides you.
-  * **⚡ Overdrive Guardian (Battle Mode)**: Radiant white/gold battle armor with neon cyan/magenta wings, channeling power to pierce bureaucratic red tape and transmit urgent alerts.
-* **The 4 Superpowers**:
-  * ⚡ **Signal Sense**: Detects faint distress frequencies across digital white noise and silence.
-  * 🧠 **Mind Link**: Empathetic comprehension that decodes the true human need behind words.
-  * 🛡 **Guardian Core**: Client-side cryptographic sanctuary guaranteeing privacy and zero-knowledge protection.
-  * ✨ **Echo Vision**: Pathfinder that maps the resolution route and generates trackable **Beacon IDs**.
+  * **💜 Harmonic Guide (Compassion Mode)**: Gentle, empathetic companion providing solace, active listening, and guidance.
+  * **⚡ Overdrive Guardian (Battle Mode)**: Radiant celestial battle armor with energized wings, channeling cosmic mana to break through administrative red tape and broadcast urgent distress beacons.
+* **The 4 Core Superpowers**:
+  * ⚡ **Signal Sense**: Detects faint distress frequencies and silent cries for help buried under digital white noise.
+  * 🧠 **Mind Link**: Empathetic comprehension that deciphers the true emotional urgency and human need behind words.
+  * 🛡️ **Guardian Core**: Client-side cryptographic sanctuary ensuring zero-knowledge privacy and data protection.
+  * ✨ **Echo Vision**: Pathfinder trajectory mapping that generates unique, trackable **Beacon IDs** and resolution paths.
+
+---
+
+## 🗡️ Celestial Arsenal & Lore
+
+* **Starlight Requiem (Celestial Staff)**: An ancient conduit forged from fallen starlight that channels harmonic resonance into protective barriers.
+* **Astral Veil**: A zero-knowledge ward that shields vulnerable transmissions from interceptors.
+* **Interactive 3D Grimoire & Codex**: Browse interactive 3D weapon models, battle timeline archives, and the ancient lore chronicles.
 
 ---
 
 ## 🚀 Key Features
 
-1. **Integrated Conversational Chatbot**:
-   * Structured, step-by-step intake: Name/Alias → Age → Location → Email → Category → Story Description → Urgency.
-   * "Stay Anonymous" option for full confidentiality.
-   * Real-time Signal Strength resonance meter as the user types.
-2. **Dual-Form Shifter**:
-   * Switch between Guide Mode and Guardian Mode with dynamic visual theme changes and audio chimes.
-3. **Automated Submission & Email Dispatch System**:
-   * Generates a unique cryptographic Beacon ID (e.g. `BEACON-NV-8492`).
-   * Saves records to local encrypted storage.
-   * Dispatches automated notification alerts to support coordinators.
-   * Downloadable Beacon Transmission Receipt (`.txt`).
-4. **Guardian Console (Admin / Reviewer Dashboard)**:
-   * Accessible from the footer or receipt card.
-   * View all active beacons, inspect email notification payloads, and test real email dispatches.
-5. **Interactive Audio Resonance (Web Audio API)**:
-   * Zero external audio files required. Synthesizes gentle cosmic ambient drones, star chimes, and transmission pulses directly in browser code.
-6. **Crisis Safety Net**:
-   * Automatically detects acute crisis or emergency keywords and presents immediate 24/7 verified hotline resources.
+### 1. 🤖 Intelligent Conversational Intake Bot
+* **Structured & Empathic Flow**: Step-by-step guidance covering Alias/Name, Demographics, Problem Category, Narrative Details, and Urgency Level.
+* **AI-Assisted Processing**: Powered by Gemini API / NLP heuristics for context-aware responses and sentiment recognition.
+* **Confidential & Anonymous Mode**: One-click toggle for complete anonymity and sensitive data masking.
+* **Real-time Resonance Meter**: Dynamic signal strength indicator responding dynamically to user interactions.
+
+### 2. 📜 Automated Beacon & PDF Transmission Receipts
+* Generates a unique, tamper-resistant cryptographic **Beacon ID** (e.g. `BEACON-NV-8492`).
+* **Instant PDF Receipt Generator**: Powered by `jspdf` with official celestial seal, timestamp, and grievance summary.
+* Persistent encrypted local transmission history.
+
+### 3. 📧 Automated Email Dispatch Integration
+* Direct integration with **EmailJS** to dispatch grievance beacons instantly to designated support coordinators and responders.
+
+### 4. 🎵 Zero-Dependency Web Audio Synth
+* Custom browser-native **Web Audio API** sound engine synthesizing cosmic ambient drones, harmonic chimes, and battle pulses without external audio asset downloads.
+
+### 5. 🛡️ Crisis Safety Net Interceptor
+* Real-time keyword interceptor for acute crisis signals, displaying immediate 24/7 verified hotline and support resources.
+
+### 6. ✨ High-End Visual Experience
+* Dark violet & cyan glassmorphism with dynamic custom particle systems (`ParticleBackground`, `CrimsonParticlesCanvas`).
+* Smooth micro-interactions, 3D card tilt physics, and dynamic celebratory confetti effects (`canvas-confetti`).
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **Frontend**: React 18 + Vite
-* **Styling**: Tailwind CSS + Glassmorphism + Custom Keyframe Animations
-* **Icons**: Lucide React
-* **Confetti**: Canvas-Confetti
-* **Audio**: Native Web Audio API Synthesizer (0 external MP3 dependencies)
+| Layer | Technology |
+|---|---|
+| **Framework** | [React 18](https://react.dev/) + [Vite](https://vitejs.dev/) |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) + Custom Keyframe Glassmorphism |
+| **Icons** | [Lucide React](https://lucide.dev/) |
+| **PDF Generation** | [jsPDF](https://github.com/parallax/jsPDF) |
+| **VFX / FX** | Canvas Confetti & Canvas Particle Engines |
+| **Audio** | Native Browser Web Audio API (Synthesizer Engine) |
+| **Email Service** | [EmailJS](https://www.emailjs.com/) |
 
 ---
 
-## 💻 Running the Project Locally
+## ⚙️ Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```env
+# Optional AI / Intake API Keys
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+
+# EmailJS Service Configuration
+VITE_EMAILJS_SERVICE_ID=your_emailjs_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_emailjs_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
+```
+
+---
+
+## 💻 Getting Started Locally
+
+### Prerequisites
+* Node.js (v18 or higher recommended)
+* npm / yarn / pnpm
+
+### Installation
 
 ```bash
-# Navigate to the project directory
+# 1. Clone the repository
+git clone https://github.com/saniarajesh/nova.git
+
+# 2. Navigate to project directory
 cd nova-portal
 
-# Install dependencies
+# 3. Install dependencies
 npm install
 
-# Start the local development server
+# 4. Start local development server
 npm run dev
 ```
 
-Open your browser at `http://localhost:3000`.
+Open [http://localhost:5173](http://localhost:5173) (or the port indicated in your terminal) to view the portal.
+
+### Building for Production
+
+```bash
+# Build optimized production bundle
+npm run build
+
+# Preview production build locally
+npm run preview
+```
 
 ---
 
-## 🌐 Deploying to Production (Step 6)
+## 🌐 Deployment
 
-### Option A: Vercel (Recommended — 1 Click)
-1. Push your code to a GitHub repository.
-2. Go to [Vercel](https://vercel.com) and click **"Add New Project"**.
-3. Import your GitHub repository.
-4. Framework Preset will auto-detect **Vite**. Click **Deploy**!
-5. You will get a public live URL like `https://nova-portal.vercel.app`.
+### Option A: Vercel (Recommended)
+1. Push your repository to GitHub.
+2. Link the repository in [Vercel](https://vercel.com).
+3. Set your environment variables in the Vercel project settings.
+4. Click **Deploy**.
 
 ### Option B: Netlify
 1. Run `npm run build`.
-2. Drag and drop the generated `dist` folder into [Netlify Drop](https://app.netlify.com/drop).
-3. Your site is instantly live!
+2. Connect your Git repository or deploy the `dist/` directory directly via [Netlify Drop](https://app.netlify.com/drop).
 
 ---
 
-## 📧 Submission Template (Step 7)
+## 📄 License
 
-```markdown
-Subject: Submission: Superhero Portal Challenge - NOVA (The Guardian of Unheard Voices)
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-Hi Review Team,
+---
 
-Here is my submission for the Superhero Portal Challenge:
-
-- Project Name: NOVA — The Guardian of Unheard Voices
-- Public Live URL: [INSERT YOUR DEPLOYED URL]
-- GitHub Repository: [INSERT YOUR GITHUB REPO URL]
-
-Summary:
-NOVA is an original anime superhero who helps people facing grievances, hardships, or ignored requests. 
-The portal features:
-1. Complete character dossier, origin story, and 4 specialized powers.
-2. Dual-form toggle (Harmonic Guide & Overdrive Guardian).
-3. Conversational chatbot intake (Name, Age, Location, Email, Problem, Urgency).
-4. Automated submission system with unique Beacon IDs and email notification dispatch.
-5. Built-in Guardian Console for reviewing submissions and email logs.
-6. Zero-dependency Web Audio API soundscape and crisis safety interceptor.
-
-Thank you for your review!
-```
+<p align="center">
+  Forged with 💜 & ✨ for the <b>Superhero Portal Challenge</b>
+</p>
