@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>✦ NOVA ADMIN TRIAGE DISPATCH ✦</title>
+</head>
+<body style="margin: 0; padding: 24px 0; background-color: #040103; font-family: 'Courier New', Courier, monospace; color: #f8fafc;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #040103;">
+    <tr>
+      <td align="center" style="padding: 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #0a0a0a; border: 1px solid #450a0a; border-radius: 12px; overflow: hidden; box-shadow: 0 0 20px rgba(153, 27, 27, 0.4);">
+          
+          <tr>
+            <td style="background: linear-gradient(to right, #450a0a, #78350f, #3b0764); padding: 24px; text-align: center; border-bottom: 2px solid #fbbf24;">
+              <h2 style="color: #fbbf24; margin: 0; font-size: 20px; letter-spacing: 2px; text-transform: uppercase;">✦ NOVA BEACON TRANSMISSION ✦</h2>
+              <p style="color: #cbd5e1; margin: 10px 0 0 0; font-size: 12px; letter-spacing: 1px;">THE CELESTIAL WEAVER • ADMIN TRIAGE ALERT</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 28px; background-color: #0a0a0a;">
+              <div style="margin-bottom: 20px;">
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Beacon ID:</strong> <span style="color: #fbbf24;">{{beacon_id}}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Status:</strong> <span style="color: #34d399;">{{status}}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Category:</strong> <span style="color: #c084fc;">{{category}}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Urgency:</strong> <span style="color: #ef4444;">{{urgency}}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Timestamp:</strong> <span style="color: #cbd5e1;">{{timestamp}}</span></p>
+              </div>
+              
+              <div style="border-top: 1px dashed #475569; margin: 20px 0;"></div>
+              
+              <h3 style="color: #f87171; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;">▶ SPEAKER DETAILS</h3>
+              <div style="background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px; border-radius: 8px;">
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Name:</strong> {{name}}</p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Age:</strong> {{age}}</p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Location:</strong> {{location}}</p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Contact Email:</strong> <span style="color: #60a5fa;">{{contact_email}}</span></p>
+              </div>
+              
+              <div style="border-top: 1px dashed #475569; margin: 20px 0;"></div>
+              
+              <h3 style="color: #f87171; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;">▶ GRIEVANCE SUMMARY</h3>
+              <div style="background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: 8px; line-height: 1.6; color: #f1f5f9;">
+                {{{grievance}}}
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="background-color: #020617; padding: 14px; text-align: center; border-top: 1px solid #1e293b;">
+              <p style="color: #475569; font-size: 11px; margin: 0;">Nova Dispatch System • Admin Triage Payload • End of Transmission</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

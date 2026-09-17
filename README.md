@@ -89,8 +89,21 @@ VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
 # EmailJS Service Configuration
 VITE_EMAILJS_SERVICE_ID=your_emailjs_service_id
-VITE_EMAILJS_TEMPLATE_ID=your_emailjs_template_id
 VITE_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
+
+# 1. Admin Triage Alert Template
+# Dashboard source file: email-templates/admin-template_7o5tasj.html
+# Dashboard settings: To Email = {{to_email}}, Reply To = {{reply_to}}, Content = HTML from file
+VITE_EMAILJS_ADMIN_TEMPLATE_ID=template_7o5tasj
+VITE_ADMIN_EMAIL=saniarajesh7205@gmail.com
+
+# 2. User Welcome Confirmation Template
+# Dashboard source file: email-templates/user-template_b3yly2t.html
+# Dashboard settings: To Email = {{to_email}}, Reply To = {{reply_to}}, Content = HTML from file
+VITE_EMAILJS_USER_TEMPLATE_ID=template_b3yly2t
+
+# Portal config
+VITE_PORTAL_URL=http://localhost:3000
 ```
 
 ---

@@ -3,20 +3,13 @@
  * NOVA DISPATCH ENGINE — EMAIL NOTIFICATION SERVICE
  * ============================================================================
  * Handles real-time dual dispatch via EmailJS:
- *  1. Admin Notification (template_7o5tasj) -> saniarajesh7205@gmail.com
+ *  1. Admin Notification (template_7o5tasj) -> VITE_ADMIN_EMAIL
  *  2. User Welcome Email (template_b3yly2t) -> User's registered email
  * ============================================================================
  */
 
-// Generate the beautiful User Welcome HTML email matching Nova Portal flyer aesthetic
-export const generateUserWelcomeHtml = (userData, registrationDate, registrationTime) => {
-  const name = userData.name || userData.full_name || 'Citizen';
-  const beaconId = userData.id || userData.beacon_id || 'NOVA-REGISTERED';
-  const role = userData.category || userData.role || 'Nova Citizen';
-  const supportEmail = 'saniarajesh7205@gmail.com';
-
-  return `
-<!DOCTYPE html>
+export const generateUserWelcomeHtml = (params) => {
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -49,7 +42,7 @@ export const generateUserWelcomeHtml = (userData, registrationDate, registration
             <td style="padding: 32px 28px; background: #09020a; background-image: radial-gradient(circle at 50% 0%, rgba(220, 38, 38, 0.12) 0%, transparent 75%);">
               
               <p style="color: #f1f5f9; font-size: 16px; line-height: 1.7; margin: 0 0 16px 0;">
-                Hello <strong style="color: #fbbf24;">${name}</strong>,
+                Hello <strong style="color: #fbbf24;">${params.name}</strong>,
               </p>
 
               <p style="color: #e2e8f0; font-size: 15px; line-height: 1.7; margin: 0 0 24px 0;">
@@ -81,23 +74,27 @@ export const generateUserWelcomeHtml = (userData, registrationDate, registration
                       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size: 13px; line-height: 1.8;">
                         <tr>
                           <td style="color: #94a3b8; width: 40%; font-weight: 500;">Beacon / User ID:</td>
-                          <td style="color: #fbbf24; font-family: monospace; font-weight: 700;">${beaconId}</td>
+                          <td style="color: #fbbf24; font-family: monospace; font-weight: 700;">${params.beacon_id}</td>
                         </tr>
                         <tr>
                           <td style="color: #94a3b8; font-weight: 500;">Registered Name:</td>
-                          <td style="color: #ffffff; font-weight: 600;">${name}</td>
+                          <td style="color: #ffffff; font-weight: 600;">${params.name}</td>
                         </tr>
                         <tr>
                           <td style="color: #94a3b8; font-weight: 500;">Classification:</td>
-                          <td style="color: #c084fc;">${role}</td>
+                          <td style="color: #c084fc;">${params.classification}</td>
+                        </tr>
+                        <tr>
+                          <td style="color: #94a3b8; font-weight: 500;">Priority:</td>
+                          <td style="color: #fca5a5; font-weight: 600;">${params.priority}</td>
                         </tr>
                         <tr>
                           <td style="color: #94a3b8; font-weight: 500;">Account Status:</td>
-                          <td style="color: #34d399; font-weight: 600;">🟢 Active & Transmitted</td>
+                          <td style="color: #34d399; font-weight: 600;">${params.account_status}</td>
                         </tr>
                         <tr>
                           <td style="color: #94a3b8; font-weight: 500;">Timestamp:</td>
-                          <td style="color: #cbd5e1;">${registrationDate} • ${registrationTime}</td>
+                          <td style="color: #cbd5e1;">${params.timestamp}</td>
                         </tr>
                       </table>
                     </td>
@@ -107,8 +104,12 @@ export const generateUserWelcomeHtml = (userData, registrationDate, registration
 
               <!-- Assistance & Support Note -->
               <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7; margin: 24px 0 20px 0;">
-                For any assistance, contact us at <a href="mailto:${supportEmail}" style="color: #fbbf24; text-decoration: none; font-weight: 600;">${supportEmail}</a>.
+                For any assistance, contact us at <a href="mailto:${params.support_email}" style="color: #fbbf24; text-decoration: none; font-weight: 600;">${params.support_email}</a>.
               </p>
+
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${params.portal_url}" style="background: linear-gradient(135deg, #b91c1c 0%, #f59e0b 100%); color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Access Nova Portal</a>
+              </div>
 
               <!-- Sign off -->
               <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
@@ -133,22 +134,11 @@ export const generateUserWelcomeHtml = (userData, registrationDate, registration
     </tr>
   </table>
 </body>
-</html>
-  `.trim();
+</html>`.trim();
 };
 
-// Generate the Admin Triage Notification HTML
-export const generateAdminNotificationHtml = (userData, registrationDate, registrationTime) => {
-  const name = userData.name || userData.full_name || 'Citizen';
-  const beaconId = userData.id || userData.beacon_id || ('NOVA-' + Math.random().toString(36).substring(2, 8).toUpperCase());
-  const category = userData.category || userData.role || 'General Distress';
-  const grievance = userData.grievance || userData.problem || 'No grievance summary specified';
-  const email = userData.email || 'Not Provided';
-  const age = userData.age || 'N/A';
-  const location = userData.location || 'N/A';
-
-  return `
-<!DOCTYPE html>
+export const generateAdminNotificationHtml = (params) => {
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -170,27 +160,28 @@ export const generateAdminNotificationHtml = (userData, registrationDate, regist
           <tr>
             <td style="padding: 28px; background-color: #0a0a0a;">
               <div style="margin-bottom: 20px;">
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Beacon ID:</strong> <span style="color: #fbbf24;">${beaconId}</span></p>
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Status:</strong> <span style="color: #34d399;">TRANSMITTED & ACTIVATED</span></p>
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Category:</strong> <span style="color: #c084fc;">${category}</span></p>
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Timestamp:</strong> <span style="color: #cbd5e1;">${registrationDate} ${registrationTime}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Beacon ID:</strong> <span style="color: #fbbf24;">${params.beacon_id}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Status:</strong> <span style="color: #34d399;">${params.status}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Category:</strong> <span style="color: #c084fc;">${params.category}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Urgency:</strong> <span style="color: #ef4444;">${params.urgency}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Timestamp:</strong> <span style="color: #cbd5e1;">${params.timestamp}</span></p>
               </div>
               
               <div style="border-top: 1px dashed #475569; margin: 20px 0;"></div>
               
               <h3 style="color: #f87171; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;">▶ SPEAKER DETAILS</h3>
               <div style="background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px; border-radius: 8px;">
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Name:</strong> ${name}</p>
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Age:</strong> ${age}</p>
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Location:</strong> ${location}</p>
-                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Contact Email:</strong> <span style="color: #60a5fa;">${email}</span></p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Name:</strong> ${params.name}</p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Age:</strong> ${params.age}</p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Location:</strong> ${params.location}</p>
+                <p style="margin: 4px 0;"><strong style="color: #94a3b8;">Contact Email:</strong> <span style="color: #60a5fa;">${params.contact_email}</span></p>
               </div>
               
               <div style="border-top: 1px dashed #475569; margin: 20px 0;"></div>
               
               <h3 style="color: #f87171; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;">▶ GRIEVANCE SUMMARY</h3>
               <div style="background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: 8px; line-height: 1.6; color: #f1f5f9;">
-                ${grievance.replace(/\n/g, '<br/>')}
+                ${params.grievance.replace(/\n/g, '<br/>')}
               </div>
             </td>
           </tr>
@@ -206,14 +197,13 @@ export const generateAdminNotificationHtml = (userData, registrationDate, regist
     </tr>
   </table>
 </body>
-</html>
-  `.trim();
+</html>`.trim();
 };
 
 /**
  * Main dispatch function sending real-time notification to ADMIN_EMAIL and User Welcome
  * @param {Object} userData - User / Beacon registration details
- * @returns {Promise<{success: boolean, adminSent: boolean, userSent: boolean}>}
+ * @returns {Promise<{adminSent: boolean, userSent: boolean}>}
  */
 export const sendNovaBeaconEmail = async (userData = {}) => {
   const EMAILJS_SERVICE_ID        = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_7sr3n07';
@@ -221,6 +211,7 @@ export const sendNovaBeaconEmail = async (userData = {}) => {
   const EMAILJS_USER_TEMPLATE_ID  = import.meta.env.VITE_EMAILJS_USER_TEMPLATE_ID || 'template_b3yly2t';
   const EMAILJS_PUBLIC_KEY        = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 't7RGK3htj8Y8KyxmE';
   const ADMIN_EMAIL               = import.meta.env.VITE_ADMIN_EMAIL || 'saniarajesh7205@gmail.com';
+  const PORTAL_URL                = import.meta.env.VITE_PORTAL_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 
   const now = new Date();
   const registrationDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -232,30 +223,62 @@ export const sendNovaBeaconEmail = async (userData = {}) => {
   const realLocation = (userData.location || userData.phone || 'N/A').trim();
   const realCategory = (userData.category || userData.role || 'General Distress').trim();
   const realGrievance = (userData.grievance || userData.problem || 'No grievance specified').trim();
+  const realUrgency = (userData.urgency || 'High').trim();
   const realBeaconId = userData.id || userData.beacon_id || userData.user_id || ('NOVA-' + Math.random().toString(36).substring(2, 9).toUpperCase());
+  const realTimestamp = `${registrationDate} ${registrationTime}`;
 
-  const userHtml = generateUserWelcomeHtml(
-    { name: realName, id: realBeaconId, category: realCategory },
-    registrationDate,
-    registrationTime
-  );
+  const adminParams = {
+    to_email: ADMIN_EMAIL,
+    reply_to: realEmail || ADMIN_EMAIL,
+    beacon_id: realBeaconId,
+    status: 'TRANSMITTED & ACTIVATED',
+    category: realCategory,
+    urgency: realUrgency,
+    timestamp: realTimestamp,
+    name: realName,
+    age: realAge,
+    location: realLocation,
+    contact_email: realEmail,
+    grievance: realGrievance
+  };
 
-  const adminHtml = generateAdminNotificationHtml(
-    {
-      name: realName,
-      id: realBeaconId,
-      category: realCategory,
-      email: realEmail,
-      age: realAge,
-      location: realLocation,
-      grievance: realGrievance
-    },
-    registrationDate,
-    registrationTime
-  );
+  const adminHtml = generateAdminNotificationHtml(adminParams);
+  
+  const adminPlaintext = `✦ NOVA BEACON TRANSMISSION ✦
+Beacon ID: ${adminParams.beacon_id}
+Status: ${adminParams.status}
+Category: ${adminParams.category}
+Urgency: ${adminParams.urgency}
+Timestamp: ${adminParams.timestamp}
 
-  const userPlaintext = `
-### ✦ Welcome to Nova Portal
+▶ SPEAKER DETAILS:
+Name: ${adminParams.name}
+Age: ${adminParams.age}
+Location: ${adminParams.location}
+Contact Email: ${adminParams.contact_email}
+
+▶ GRIEVANCE:
+${adminParams.grievance}`.trim();
+
+  adminParams.html_message = adminHtml;
+  adminParams.message = adminPlaintext;
+
+  const userParams = {
+    to_email: realEmail,
+    reply_to: ADMIN_EMAIL,
+    name: realName,
+    beacon_id: realBeaconId,
+    classification: realCategory,
+    priority: realUrgency,
+    account_status: '🟢 Active & Transmitted',
+    timestamp: realTimestamp,
+    support_email: ADMIN_EMAIL,
+    portal_url: PORTAL_URL
+  };
+
+  const userHtml = generateUserWelcomeHtml(userParams);
+
+  const userPlaintext = `### ✦ Welcome to Nova Portal
 
 Your journey with Nova begins here. 🚀
 
@@ -264,33 +287,21 @@ Your registration has been successfully completed. Welcome to the Nova Portal fa
 Explore. Connect. Grow.
 
 Registration Details:
-- Beacon ID: ${realBeaconId}
-- Name: ${realName}
-- Classification: ${realCategory}
-- Registered: ${registrationDate} at ${registrationTime}
+- Beacon / User ID: ${userParams.beacon_id}
+- Registered Name: ${userParams.name}
+- Classification: ${userParams.classification}
+- Priority: ${userParams.priority}
+- Account Status: ${userParams.account_status}
+- Timestamp: ${userParams.timestamp}
 
-For any assistance, contact us at saniarajesh7205@gmail.com.
+For any assistance, contact us at ${userParams.support_email}.
+Access Nova Portal: ${userParams.portal_url}
 
 Best regards,
-The Nova Portal Team
-`.trim();
+The Nova Portal Team`.trim();
 
-  const adminPlaintext = `
-✦ NOVA BEACON TRANSMISSION ✦
-Beacon ID: ${realBeaconId}
-Status: TRANSMITTED & ACTIVATED
-Category: ${realCategory}
-Timestamp: ${registrationDate} ${registrationTime}
-
-▶ SPEAKER DETAILS:
-Name: ${realName}
-Age: ${realAge}
-Location: ${realLocation}
-Contact Email: ${realEmail}
-
-▶ GRIEVANCE:
-${realGrievance}
-`.trim();
+  userParams.html_message = userHtml;
+  userParams.message = userPlaintext;
 
   let adminSent = false;
   let userSent = false;
@@ -304,37 +315,13 @@ ${realGrievance}
         service_id: EMAILJS_SERVICE_ID,
         template_id: EMAILJS_ADMIN_TEMPLATE_ID,
         user_id: EMAILJS_PUBLIC_KEY,
-        template_params: {
-          to_email: ADMIN_EMAIL,
-          admin_email: ADMIN_EMAIL,
-          email: realEmail,
-          user_email: realEmail,
-          reply_to: realEmail || ADMIN_EMAIL,
-          name: realName,
-          full_name: realName,
-          user_name: realName,
-          age: realAge,
-          location: realLocation,
-          category: realCategory,
-          role: realCategory,
-          beacon_id: realBeaconId,
-          id: realBeaconId,
-          user_id: realBeaconId,
-          grievance: realGrievance,
-          problem: realGrievance,
-          timestamp: `${registrationDate} ${registrationTime}`,
-          registration_date: registrationDate,
-          registration_time: registrationTime,
-          message: adminPlaintext,
-          content: adminPlaintext,
-          html_message: adminHtml
-        }
+        template_params: adminParams
       })
     });
 
     if (adminResponse.ok) {
       adminSent = true;
-      console.log(`[Nova Dispatch] Admin notification sent successfully to ${ADMIN_EMAIL} (Template: ${EMAILJS_ADMIN_TEMPLATE_ID})`);
+      console.log(`[Nova Dispatch] Admin notification sent successfully to ${ADMIN_EMAIL}`);
     } else {
       const errText = await adminResponse.text();
       console.error('[Nova Dispatch] Admin email failed:', errText);
@@ -344,7 +331,8 @@ ${realGrievance}
   }
 
   // 2. Dispatch User Welcome Email (template_b3yly2t) if valid user email is present
-  if (realEmail && realEmail.includes('@')) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (realEmail && emailRegex.test(realEmail)) {
     // 600ms delay to prevent EmailJS concurrency throttle
     await new Promise(resolve => setTimeout(resolve, 600));
 
@@ -356,35 +344,13 @@ ${realGrievance}
           service_id: EMAILJS_SERVICE_ID,
           template_id: EMAILJS_USER_TEMPLATE_ID,
           user_id: EMAILJS_PUBLIC_KEY,
-          template_params: {
-            to_email: realEmail,
-            email: realEmail,
-            user_email: realEmail,
-            name: realName,
-            full_name: realName,
-            user_name: realName,
-            reply_to: ADMIN_EMAIL,
-            admin_email: ADMIN_EMAIL,
-            support_email: ADMIN_EMAIL,
-            beacon_id: realBeaconId,
-            id: realBeaconId,
-            user_id: realBeaconId,
-            role: realCategory,
-            category: realCategory,
-            registration_date: registrationDate,
-            registration_time: registrationTime,
-            timestamp: `${registrationDate} ${registrationTime}`,
-            account_status: '🟢 Active',
-            message: userPlaintext,
-            content: userPlaintext,
-            html_message: userHtml
-          }
+          template_params: userParams
         })
       });
 
       if (userResponse.ok) {
         userSent = true;
-        console.log(`[Nova Dispatch] User Welcome email sent successfully to ${realEmail} (Template: ${EMAILJS_USER_TEMPLATE_ID})`);
+        console.log(`[Nova Dispatch] User Welcome email sent successfully to ${realEmail}`);
       } else {
         const errText = await userResponse.text();
         console.error('[Nova Dispatch] User Welcome email failed:', errText);
@@ -393,12 +359,8 @@ ${realGrievance}
       console.error('[Nova Dispatch] Exception sending User Welcome email:', err);
     }
   } else {
-    console.warn('[Nova Dispatch] No valid user email provided for user welcome dispatch:', realEmail);
+    console.warn(`[Nova Dispatch] Skipping user welcome dispatch: No valid user email provided ('${realEmail}')`);
   }
 
-  return {
-    success: adminSent || userSent,
-    adminSent,
-    userSent
-  };
+  return { adminSent, userSent };
 };

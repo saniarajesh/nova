@@ -177,8 +177,16 @@ export default function ChatGptPortal({ onComplete, onNavigate, initialSession =
           origin: { y: 0.6 }
         });
 
+        sendNovaBeaconEmail(finalUserData)
+          .then(result => {
+            setEmailNotificationSent(result);
+          })
+          .catch(err => {
+            console.error("Email dispatch failed:", err);
+            setEmailNotificationSent({ adminSent: false, userSent: false });
+          });
+
         if (onComplete) {
-          sendNovaBeaconEmail(finalUserData).catch(err => console.error("Email dispatch failed:", err));
           setTimeout(() => {
             onComplete(finalUserData);
           }, 2000);
