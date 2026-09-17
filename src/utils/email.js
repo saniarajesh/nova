@@ -228,18 +228,39 @@ export const sendNovaBeaconEmail = async (userData = {}) => {
   const realTimestamp = `${registrationDate} ${registrationTime}`;
 
   const adminParams = {
-    to_email: ADMIN_EMAIL,
-    reply_to: realEmail || ADMIN_EMAIL,
-    beacon_id: realBeaconId,
-    status: 'TRANSMITTED & ACTIVATED',
-    category: realCategory,
-    urgency: realUrgency,
-    timestamp: realTimestamp,
-    name: realName,
-    age: realAge,
-    location: realLocation,
-    contact_email: realEmail,
-    grievance: realGrievance
+    // ── routing (load-bearing) ──────────────────────────────
+    to_email:          ADMIN_EMAIL,
+    reply_to:          realEmail || ADMIN_EMAIL,
+    from_name:         'Nova Portal Dispatch',
+    // ── beacon header ──────────────────────────────────────
+    beacon_id:         realBeaconId,
+    id:                realBeaconId,
+    user_id:           realBeaconId,
+    status:            'TRANSMITTED & ACTIVATED',
+    urgency:           realUrgency,
+    // ── speaker name (all aliases the dashboard may use) ───
+    name:              realName,
+    full_name:         realName,
+    user_name:         realName,
+    // ── speaker contact ────────────────────────────────────
+    email:             realEmail,
+    user_email:        realEmail,
+    contact_email:     realEmail,
+    phone:             realLocation,    // dashboard label = "Phone"
+    location:          realLocation,
+    age:               realAge,
+    // ── classification ─────────────────────────────────────
+    category:          realCategory,
+    role:              realCategory,
+    // ── grievance ──────────────────────────────────────────
+    grievance:         realGrievance,
+    problem:           realGrievance,
+    // ── time (split + combined) ────────────────────────────
+    registration_date: registrationDate,
+    registration_time: registrationTime,
+    timestamp:         realTimestamp,
+    // ── portal URL ─────────────────────────────────────────
+    portal_url:        PORTAL_URL
   };
 
   const adminHtml = generateAdminNotificationHtml(adminParams);
@@ -264,16 +285,37 @@ ${adminParams.grievance}`.trim();
   adminParams.message = adminPlaintext;
 
   const userParams = {
-    to_email: realEmail,
-    reply_to: ADMIN_EMAIL,
-    name: realName,
-    beacon_id: realBeaconId,
-    classification: realCategory,
-    priority: realUrgency,
-    account_status: '🟢 Active & Transmitted',
-    timestamp: realTimestamp,
-    support_email: ADMIN_EMAIL,
-    portal_url: PORTAL_URL
+    // ── routing (load-bearing) ──────────────────────────────
+    to_email:          realEmail,
+    email:             realEmail,
+    user_email:        realEmail,
+    reply_to:          ADMIN_EMAIL,
+    from_name:         'NOVA TEAM',
+    // ── name (all aliases the dashboard may use) ───────────
+    name:              realName,
+    full_name:         realName,
+    user_name:         realName,
+    // ── beacon ─────────────────────────────────────────────
+    beacon_id:         realBeaconId,
+    id:                realBeaconId,
+    user_id:           realBeaconId,
+    // ── classification ─────────────────────────────────────
+    role:              realCategory,
+    category:          realCategory,
+    classification:    realCategory,
+    urgency:           realUrgency,
+    priority:          realUrgency,
+    // ── account ────────────────────────────────────────────
+    account_status:    '🟢 Active & Transmitted',
+    // ── time (split + combined) ────────────────────────────
+    registration_date: registrationDate,
+    registration_time: registrationTime,
+    timestamp:         realTimestamp,
+    // ── support & portal ───────────────────────────────────
+    support_email:     ADMIN_EMAIL,
+    admin_email:       ADMIN_EMAIL,
+    portal_url:        PORTAL_URL
+    // NOTE: grievance, age, location deliberately excluded
   };
 
   const userHtml = generateUserWelcomeHtml(userParams);
